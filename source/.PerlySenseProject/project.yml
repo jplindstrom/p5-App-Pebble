@@ -5,7 +5,7 @@
 project:
 
   #The human readable name of the Project
-  moniker: 'The Project Without a Name'
+  moniker: 'App::Pebble'
 
   #Extra @INC directories, relative to the project root
   #These come before the default inc directories "." and "lib"
@@ -47,13 +47,13 @@ external:
         #   Running perl -c on random Perl code will execute
         #   the BEGIN blocks! Any funny business in them and you're toast!
         #!!!NOTE!!!
-        syntax: 0
+        syntax: 1
 
         #Perl Critic
         #PerlySense will point Critic to a .perlcritic file in this
         #directory. A default config file with fairly lenient rules is
         #provided.
-        critic: 0
+        critic: 1
 
 
 
@@ -61,7 +61,7 @@ external:
 #match is used.
 run_file:
   -
-    command: "prove -v ${INC} \"${SOURCE_FILE}\""
+    command: "prove --nocolor -v ${INC} \"${SOURCE_FILE}\""
     moniker: Test
     rex: \.t$
     run_from: source_root_directory
