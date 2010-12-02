@@ -5,7 +5,7 @@ use strict;
 
 =head1 NAME
 
-App::Pebble - The great new App::Pebble!
+App::Pebble - Unix like streams, but with objects intead of lines of text
 
 =head1 VERSION
 
