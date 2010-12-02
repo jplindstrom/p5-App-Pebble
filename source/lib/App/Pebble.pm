@@ -18,35 +18,7 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use App::Pebble;
-
-    my $foo = App::Pebble->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
+The Unix idea of a stream of lines, on steroids.
 
 =head1 AUTHOR
 
@@ -107,4 +79,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of App::Pebble
+1;
