@@ -1,0 +1,12 @@
+
+* DONE
+* IDEAS
+** Parallel processing
+** 
+* STORIES
+** First output Pebble::Object definition
+** p -m --Match --name=abc,def,ghi or named captures
+** p -s --split --name=abc,def,ghi or --ghi+ (means capture all the rest in there)
+** p -p --print (this is also the default action altogether)
+*** Default format
+* p -j --json
