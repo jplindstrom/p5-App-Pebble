@@ -14,19 +14,28 @@ use IO::Pipeline;
 use Moose;
 use JSON::XS;
 
+sub _meta_class {
+    my $class = shift;
+    my ($has) = @_;
+    @$has or die( "Can't define class: No field names provided (with 'has')\n" );
+
+    my $meta_class = Moose::Meta::Class->create_anon_class(
+        superclasses => [ "App::Pebble::Object" ],
+    );
+    for my $field (@$has) {
+        $meta_class->add_attribute( $field => ( is => 'rw' ) );
+    }    
+
+    return $meta_class;
+}
+
 sub split {
     my $class = shift;
     my ($args) = @_;
     my $split = $args->{split} || qr/\s+/; 
     my $has   = $args->{has}   || [];
 
-    my $meta_class = Moose::Meta::Class->create_anon_class(
-        superclasses => [ "App::Pebble::Object" ],
-    );
-
-    for my $field (@$has) {
-        $meta_class->add_attribute( $field => ( is => 'rw' ) );
-    }
+    my $meta_class = $class->_meta_class( $has );
 
     return pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
 }
@@ -40,7 +49,36 @@ sub _split_line {
     for my $field ( @$has ) {
         $arg_value->{ $field } = shift( @values );
     }
-    use Data::Dumper;
+
+    return $arg_value;
+}
+
+sub match {
+    my $class = shift;
+    my ($args) = @_;
+    my $regex = $args->{regex} or die( "No regex provided\n" );
+    my $has = $args->{has} || [];
+
+    my $meta_class = $class->_meta_class( $has );
+
+    return pmap {
+        my $args = $class->_match_line( $regex, $has, $_ );
+        $args ? $meta_class->new_object( $args ) : ();
+    };
+}
+
+sub _match_line {
+    my $class = shift;
+    my ( $regex, $has, $line ) = @_;
+
+    my @values = ( $line =~ $regex ) or return undef;
+    my $arg_value;
+    my $capture_count = 0;
+    for my $field ( @$has ) {
+        my $capture_count++;
+        $arg_value->{ $field } = eval "\$$capture_count";
+    }
+
     return $arg_value;
 }
 

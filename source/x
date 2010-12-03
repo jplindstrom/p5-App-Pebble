@@ -1,5 +1,5 @@
 
-less -S /var/log/windowserver.log | ./bin/pebble.pl 'App::Pebble::Object->split({ has => [qw/ month day time  number error module message/] })'
+less -S /var/log/windowserver.log | ./bin/pebble.pl 'App::Pebble::Object->split({ has => [qw/ month day time  number error module message/] }) | pgrep { $_->time =~ /14:54:20/ }'
 
 
 #  | p { use Data::Dumper; $_->module }
