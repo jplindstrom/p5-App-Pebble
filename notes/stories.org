@@ -2,11 +2,62 @@
 * DONE
 * IDEAS
 ** Parallel processing
-** 
+** Input
+*** OS
+**** ps
+**** ls
+**** find
+**** iostat
+**** du
+**** df
+**** /etc/passwd
+*** Web
+**** GET
+**** XPaths
+*** SQLite db
+*** SQL query
+*** MySQL resultset output
+**** with ;
+**** with \G
+** Output
+*** Pebble / Perl
+*** Table (like SQL query)
+*** HTML table
+**** Possibly open browser
+*** Org table
+*** SQL
+**** Insert
+**** Update
+**** Upsert
+*** xargs
+*** CSV
+*** SQLite db
+** Grep
+** Map
+** Exmaples
+*** Get a list of URLs, and find the Director, insert it into the director table
+**** p -s --has=url urls.txt | p --grep '{ $url =~ /imdb.com/ }' | p html=Web-get(url) | p --with=html -parse=XPath --xpath=...
+**** p -s --has=url urls.txt | p --grep url=/imdb.com/ | p --map '{ Web->get($url)' --parse=XPath --xpath=director='//
 * STORIES
 ** First output Pebble::Object definition
-** p -m --Match --name=abc,def,ghi or named captures
-** p -s --split --name=abc,def,ghi or --ghi+ (means capture all the rest in there)
+** Input Pebble::Object definition
+** new object definition can come at any time in the stream
+*** But is ignored unless first?
+** p -m --Match --has=abc,def,ghi or named captures
+** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
 ** p -p --print (this is also the default action altogether)
 *** Default format
-* p -j --json
+** p -p 'hello %s $name %20s, your birthday is {$birthdate->ymd}\n' title,lastname
+** p -j --json
+** p --in=CSV
+*** Loads Pebble::In::CSV
+**** Might load field defs from first line
+**** p --in=CSV FILEs
+*** p --in=CSV --csv_fields=abc,def,ghi
+**** May select only those if already defined
+**** implies --has=fields
+**** May name them, in order to use them
+***** --csv_fields=,,name,age,,title
+****** To skip the first two and 5th csv column
+** p --parse=
+** p --table=
