@@ -22,16 +22,34 @@ sub main {
         "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
         "default_post:s" => \( my $default_post = 'pmap { "$_\n" }' ),
         "parser:s"       => \( my $parser ),
+        "cmd:s"          => \( my $cmd ),
     );
 
-    my $parser_perl;
-    $parser and $parser_perl = "$parser->parser";
+    my $input_source = q{\*STDIN};
+    my $input_source_fh;
+    if( $cmd ) {
+        my $cmd_name = $cmd; #TODO: first segment of the full command
+        $parser ||= $cmd_name;
 
-    my ($perl) = @ARGV;
-    $perl ||= 'pmap { $_ }';
-    my @pipes = grep { $_ } ( q{\*STDIN}, $default_pre, $parser_perl, $perl, $default_post, q{\*STDOUT} );
+        open( $input_source_fh, "-|", $cmd ) or die( "Could not read from command ($cmd)\n" );
+        $input_source = '$input_source_fh';
+    };
 
-    eval join( " | ", @pipes );
+    my $parser_stage;
+    $parser and $parser_stage ||= "$parser->parser";
+
+    my ($user_stage) = @ARGV;
+    $user_stage ||= 'pmap { $_ }';
+    my @pipes = grep { $_ } (
+        $input_source,
+        $default_pre,
+        $parser_stage,
+        $user_stage,
+        $default_post,
+        q{\*STDOUT}
+    );
+
+    eval join( " |\n", @pipes );
     $@ and die;
 }
 
