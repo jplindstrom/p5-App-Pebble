@@ -1,8 +1,19 @@
 
-less -S /var/log/windowserver.log | ./bin/pebble.pl 'App::Pebble::Object->split({ has => [qw/ month day time  number error module message/] }) | pgrep { $_->time =~ /14:54:20/ }'
+#less -S /var/log/windowserver.log | ./bin/pebble.pl 'App::Pebble::Object->split({ has => [qw/ month day time  number error module message/] }) | pgrep { $_->time =~ /14:54:20/ }'
+
+less -S /var/log/windowserver.log | ./bin/pebble.pl \
+'App::Pebble::Object->match({
+regex => qr/(\w+ \d+ [\d:]+)\s+\[\d+\] (\w+): (\w+): (.+)/,
+has => [qw/ date error module message /] })'
+
+# less -S /var/log/windowserver.log | ./bin/pebble.pl \
+# 'App::Pebble::Object->match({
+# regex => qr/(\w+) (.+)/,
+# has => [qw/ first line /] })'
 
 
 #  | p { use Data::Dumper; $_->module }
 # pebble --split --split-count=7 --split-has=month,day,time,number,error,module,message --has=date[DateTime] 'P->also_has( "date[DateTime]" ) | p { $_->date( P->parse_date(qw/ month day  /) } | pgrep { $_->month < 3 }'
 
         
+# Dec 02 16:05:32  [68] kCGErrorIllegalArgument: CGXSetWindowFilter: Invalid filter 2

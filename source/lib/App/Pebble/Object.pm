@@ -73,10 +73,8 @@ sub _match_line {
 
     my @values = ( $line =~ $regex ) or return undef;
     my $arg_value;
-    my $capture_count = 0;
     for my $field ( @$has ) {
-        my $capture_count++;
-        $arg_value->{ $field } = eval "\$$capture_count";
+        $arg_value->{ $field } = shift( @values );
     }
 
     return $arg_value;
