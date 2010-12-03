@@ -29,6 +29,18 @@ sub _meta_class {
     return $meta_class;
 }
 
+sub _values_to_fields {
+    my $class = shift;
+    my ($has, $values) = @_;
+
+    my $arg_value;
+    for my $field ( @$has ) {
+        $arg_value->{ $field } = shift( @$values );
+    }
+
+    return $arg_value;
+}
+
 sub split {
     my $class = shift;
     my ($args) = @_;
@@ -43,14 +55,8 @@ sub split {
 sub _split_line {
     my $class = shift;
     my ( $split, $has, $line ) = @_;
-
     my @values = split( $split, $line );
-    my $arg_value;
-    for my $field ( @$has ) {
-        $arg_value->{ $field } = shift( @values );
-    }
-
-    return $arg_value;
+    return $class->_values_to_fields( $has, \@values );
 }
 
 sub match {
@@ -70,14 +76,8 @@ sub match {
 sub _match_line {
     my $class = shift;
     my ( $regex, $has, $line ) = @_;
-
     my @values = ( $line =~ $regex ) or return undef;
-    my $arg_value;
-    for my $field ( @$has ) {
-        $arg_value->{ $field } = shift( @values );
-    }
-
-    return $arg_value;
+    return $class->_values_to_fields( $has, \@values );
 }
 
 sub as_json {

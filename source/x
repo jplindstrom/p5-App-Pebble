@@ -4,7 +4,7 @@
 less -S /var/log/windowserver.log | ./bin/pebble.pl \
 'App::Pebble::Object->match({
 regex => qr/(\w+ \d+ [\d:]+)\s+\[\d+\] (\w+): (\w+): (.+)/,
-has => [qw/ date error module message /] })'
+has => [qw/ date error module message /] }) | pgrep { $_->date =~ /:20/ }'
 
 # less -S /var/log/windowserver.log | ./bin/pebble.pl \
 # 'App::Pebble::Object->match({
