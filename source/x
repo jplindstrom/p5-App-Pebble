@@ -1,0 +1,5 @@
+
+less -S /var/log/windowserver.log | ./bin/pebble.pl 'App::Pebble::Object->split( split => "\n", has => qw/ month day time  number error module message/ ) | p { use Data::Dumper; Dumper( $_ ) }'
+
+# pebble --split --split-count=7 --split-has=month,day,time,number,error,module,message --has=date[DateTime] 'P->also_has( "date[DateTime]" ) | p { $_->date( P->parse_date(qw/ month day  /) } | pgrep { $_->month < 3 }'
+
