@@ -6,15 +6,10 @@ App::Pebble::Command::Df - Command to run "df"
 =cut
 
 package App::Pebble::Command::df;
-
-use warnings;
-use strict;
-
-use App::Pebble::Object;
 use Moose;
+use App::Pebble::Object;
 
-sub name { "df" }
-
+sub name    { "df" }
 sub command { "df" }
 
 sub parser {
@@ -22,8 +17,8 @@ sub parser {
     my ($args) = @_;
 
     return App::Pebble::Object->match({
-        regex => qr/(.+?) \s+ (\d+) \s+ (\d+) \s+ (\d+) \s+ (\d+)% \s+ (.+) $/x,
-        has => [qw/ filesystem blocks used available capacity mounted_on /]
+        regex =>  qr/ (.+?) \s+  (\d+) \s+ (\d+) \s+ (\d+) \s+ (\d+)% \s+ (.+)      $/x,
+        has   => [qw/ filesystem blocks    used      available capacity   mounted_on /]
     });
 }
 
