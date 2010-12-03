@@ -6,10 +6,9 @@ use Getopt::Long;
 use IO::Pipeline;
 
 use lib "lib";
-use App::Pebble::Object;
+use aliased "App::Pebble::Object" => "P";
 
 no warnings "once";
-*P = *App::Pebble::Object;
 *p = *pmap;
 
 main();
