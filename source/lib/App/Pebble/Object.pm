@@ -14,10 +14,10 @@ use IO::Pipeline;
 use Moose;
 
 sub split {
-    my $self = shift;
-    my ($split, $has) = @_{qw/ split has /};
-    $split ||= qr/\s+/;
-    $has ||= [];
+    my $class = shift;
+    my ($args) = @_;
+    my $split = $args->{split} || qr/\s+/; 
+    my $has   = $args->{has}   || [];
 
     my $meta_class = Moose::Meta::Class->create_anon_class(
         superclasses => [ "App::Pebble::Object" ],
@@ -27,11 +27,11 @@ sub split {
         $meta_class->add_attribute( $field => ( is => 'rw' ) );
     }
 
-    return pmap { $meta_class->new_object( $self->_split_line( $split, $has, $_ ) ) };
+    return pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
 }
 
 sub _split_line {
-    my $self = shift;
+    my $class = shift;
     my ( $split, $has, $line ) = @_;
 
     my @values = split( $split, $line );
@@ -39,7 +39,7 @@ sub _split_line {
     for my $field ( @$has ) {
         $arg_value->{ $field } = shift( @values );
     }
-
+    use Data::Dumper;
     return $arg_value;
 }
 
