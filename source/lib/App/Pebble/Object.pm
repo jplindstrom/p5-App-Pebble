@@ -12,6 +12,7 @@ use strict;
 
 use IO::Pipeline;
 use Moose;
+use JSON::XS;
 
 sub split {
     my $class = shift;
@@ -43,10 +44,18 @@ sub _split_line {
     return $arg_value;
 }
 
-sub stringify {
-    "hello there";
+sub as_json {
+    my $self = shift;
+    my %attr = %$self;
+    delete $attr{__MOP__};
+
+    my $encoder = JSON::XS->new->pretty;
+    my $json = $encoder->encode( \%attr );
+    chomp( $json );
+
+    return $json;
 }
 
-use overload q|''| => \&stringify, fallback => 1;
+use overload q|""| => \&as_json, fallback => 1;
 
 1;
