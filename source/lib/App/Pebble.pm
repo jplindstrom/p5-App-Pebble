@@ -1,20 +1,14 @@
-package App::Pebble;
-
-use warnings;
-use strict;
 
 =head1 NAME
 
 App::Pebble - Unix like streams, but with objects intead of lines of text
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
-our $VERSION = '0.01';
+package App::Pebble;
 
+use warnings;
+use strict;
 
 =head1 SYNOPSIS
 
