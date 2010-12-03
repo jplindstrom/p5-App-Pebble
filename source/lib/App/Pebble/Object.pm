@@ -92,6 +92,15 @@ sub as_json {
     return $json;
 }
 
+# maybe, not sure about this one at all
+sub fields {
+    my $self = shift;
+    my (@fields) = @_;
+    join( ", ", map { $self->$_ } @fields );
+}
+ 
 use overload q|""| => \&as_json, fallback => 1;
+
+no Moose;
 
 1;
