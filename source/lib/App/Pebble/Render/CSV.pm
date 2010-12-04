@@ -19,9 +19,8 @@ sub render {
     my ($args) = @_;
     my $fields = $args->{fields};
 
-    my $csv = Text::CSV_XS->new ({ binary => 1 })
-            or die "Cannot use CSV: ".Text::CSV->error_diag ();
-    
+    my $csv = $class->get_csv( $args );
+
     my $pending_first_line = 1;
     return pmap {
         my ($pebble) = @_;
@@ -46,4 +45,10 @@ sub render {
     };
 }
 
+sub get_csv {
+    my $class = shift;
+    return Text::CSV_XS->new ({ binary => 1 })
+            or die "Cannot use CSV: ".Text::CSV->error_diag ();
+    
+}
 1;
