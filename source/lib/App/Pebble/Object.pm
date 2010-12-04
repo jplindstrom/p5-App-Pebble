@@ -85,7 +85,7 @@ sub as_json {
     my %attr = %$self;
     delete $attr{__MOP__};
 
-    my $encoder = JSON::XS->new->pretty;
+    my $encoder = JSON::XS->new; #->pretty;
     my $json = $encoder->encode( \%attr );
     chomp( $json );
 
