@@ -11,6 +11,7 @@ use aliased "App::Pebble::Object" => "P";
 
 #TODO: plugin system
 use aliased "App::Pebble::Command::df" => "df";
+use aliased "App::Pebble::Command::du" => "du";
 
 no warnings "once";
 *p = *pmap;
@@ -27,11 +28,11 @@ sub main {
 
     my $input_source = q{\*STDIN};
     my $input_source_fh;
-    if( $cmd ) {
-        my $cmd_name = $cmd; #TODO: first segment of the full command
-        $parser ||= $cmd_name;
-
-        open( $input_source_fh, "-|", $cmd ) or die( "Could not read from command ($cmd)\n" );
+    if( $cmd && $cmd =~ /^(\S+)/ ) {
+        my $command = $1; # First word of command
+        $parser ||= $command;
+        $input_source_fh = eval "$command->run( \$cmd );"; @$ and die; # eval bc of some strangeness with 'aliased'
+        
         $input_source = '$input_source_fh';
     };
 
