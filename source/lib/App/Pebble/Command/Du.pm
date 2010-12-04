@@ -24,6 +24,4 @@ sub parser {
     });
 }
 
-#sub run { die "sdflkdjs",  @_ }
-
 1;
