@@ -11,6 +11,7 @@ use App::Pebble::Render::CSV;
 
 #TODO: plugin system, not hard coded
 sub CSV {
+    my $class = shift;
     App::Pebble::Render::CSV->render( @_ );
 }
 

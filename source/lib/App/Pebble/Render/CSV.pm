@@ -17,15 +17,18 @@ use Data::Dumper;
 sub render {
     my $class = shift;
     my ($args) = @_;
+    my $fields = $args->{fields};
 
-    my $csv = Text::CSV_XS->new ({ binary => 1 }) or die "Cannot use CSV: ".Text::CSV->error_diag ();
+    my $csv = Text::CSV_XS->new ({ binary => 1 })
+            or die "Cannot use CSV: ".Text::CSV->error_diag ();
     
     my $pending_first_line = 1;
-    my $fields;
     return pmap {
         my ($pebble) = @_;
 
-        $fields ||= [ grep { defined } map { $_->accessor } $pebble->meta->get_all_attributes ];
+        $fields ||= [
+            grep { defined } map { $_->accessor } $pebble->meta->get_all_attributes
+        ];
 
         my @lines;
         if( $pending_first_line ) {
