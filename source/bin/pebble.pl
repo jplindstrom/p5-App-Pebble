@@ -7,7 +7,7 @@ use IO::Pipeline;
 
 use lib "lib";
 use aliased "App::Pebble::Object" => "P";
-
+use aliased "App::Pebble::Render" => "R";
 
 #TODO: plugin system
 use aliased "App::Pebble::Command::df" => "df";
