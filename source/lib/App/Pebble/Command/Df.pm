@@ -7,6 +7,8 @@ App::Pebble::Command::Df - Command to run "df"
 
 package App::Pebble::Command::df;
 use Moose;
+extends "App::Pebble::Command";
+
 use App::Pebble::Object;
 
 sub name    { "df" }
