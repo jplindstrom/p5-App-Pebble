@@ -82,14 +82,18 @@ sub _match_line {
 
 sub as_json {
     my $self = shift;
-    my %attr = %$self;
-    delete $attr{__MOP__};
-
     my $encoder = JSON::XS->new; #->pretty;
-    my $json = $encoder->encode( \%attr );
+    my $json = $encoder->encode( $self->as_hashref );
     chomp( $json );
 
     return $json;
+}
+
+sub as_hashref {
+    my $self = shift;
+    my %attr = %$self;
+    delete $attr{__MOP__};
+    return \%attr;
 }
 
 # maybe, not sure about this one at all
