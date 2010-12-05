@@ -45,6 +45,8 @@
 ** DONE Does the control ones need stringification?
 *** no
 *** 
+** plimit
+** psort
 ** collect_pool
 *** pool, but collects all the items and pass the whole lot to a single post sub
 ** psort
