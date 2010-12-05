@@ -15,8 +15,8 @@ use aliased "App::Pebble::Object" => "P";
 use aliased "App::Pebble::Render" => "R";
 
 #TODO: plugin system
-use aliased "App::Pebble::Command::df" => "df";
-use aliased "App::Pebble::Command::du" => "du";
+use App::Pebble::Command::df;
+use App::Pebble::Command::du;
 
 no warnings "once";
 *p = *pmap;
@@ -35,8 +35,9 @@ sub main {
     my $input_source_fh;
     if( $cmd && $cmd =~ /^(\S+)/ ) {
         my $command = $1; # First word of command
-        $parser ||= $command;
-        $input_source_fh = eval "$command->run( \$cmd );"; @$ and die; # eval bc of some strangeness with 'aliased'
+        $parser ||= "App::Pebble::Command::$command";
+        my $command_class = "App::Pebble::Command::$command";
+        $input_source_fh = $command_class->run( $cmd );
         
         $input_source = '$input_source_fh';
     };
@@ -62,7 +63,7 @@ sub main {
     );
 
     my $pipeline_perl = join( " |\n", @pipes );
-    print "((($pipeline_perl)))\n";
+#    print "((($pipeline_perl)))\n";
     eval $pipeline_perl;
     $@ and die;
 }
