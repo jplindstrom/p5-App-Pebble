@@ -19,15 +19,6 @@ use aliased "App::Pebble::Command::du" => "du";
 no warnings "once";
 *p = *pmap;
 
-our $pool;
-our $STREAM = App::Pebble::IO::ObjectArray->new( $pool );
-sub pool {
-    @$pool = ();
-    $STREAM->seek( 0, 0 );
-
-    return psink { push( @$pool, $_ ); };
-}
-
 main();
 sub main {
     GetOptions(
