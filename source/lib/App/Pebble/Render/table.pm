@@ -22,6 +22,7 @@ sub render {
     return ppool(
       sub { push( @items, $_ ); () },
       sub {
+        @items or return "";
         format_pretty([ map { $_->as_hashref } @items ]);
       },
     );
