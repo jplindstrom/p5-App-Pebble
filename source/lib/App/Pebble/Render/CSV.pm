@@ -36,12 +36,12 @@ sub render {
             $pending_first_line = 0;
             $csv->combine( @$fields )
                     or die( "Could not create top CSV row with column names\n" );
-            push( @lines, $csv->string );
+            push( @lines, $csv->string . "\n" );
         }
 
         $csv->combine( map { $pebble->$_ } @$fields )
                 or die( "Could not write CSV row for Pebble:\n$pebble" );
-        push( @lines, $csv->string );
+        push( @lines, $csv->string . "\n" );
 
         @lines;
     };

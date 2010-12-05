@@ -86,7 +86,7 @@ sub as_json {
     my $json = $encoder->encode( $self->as_hashref );
     chomp( $json );
 
-    return $json;
+    return "$json\n";
 }
 
 sub as_hashref {

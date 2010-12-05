@@ -25,7 +25,7 @@ main();
 sub main {
     GetOptions(
         "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
-        "default_post:s" => \( my $default_post = 'pmap { "$_\n" }' ),
+        "default_post:s" => \( my $default_post ),  # 'pmap { "$_\n" }' ),
         "parser:s"       => \( my $parser ),
         "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
@@ -43,10 +43,7 @@ sub main {
 
     my $output_sink = q{\*STDOUT};
     if( $output_renderer ) {
-        $output_sink = $output_renderer;
-    }
-    else {
-        $default_post ||= 'pmap { "$_\n" }';
+        $output_renderer = "R->$output_renderer";
     }
 
     my $parser_stage;
@@ -59,7 +56,6 @@ sub main {
         $default_pre,
         $parser_stage,
         $user_stage,
-        'p { $_ }',  # in case the $user_stage ends with a file handle
         $default_post,
         $output_sink,
     );
