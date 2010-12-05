@@ -10,25 +10,21 @@ use Moose;
 extends "App::Pebble::Render";
 
 use Data::Format::Pretty::Console qw(format_pretty);
-use App::Pebble::IO::ObjectArray;
+use IO::Pipeline;
 
 sub needs_pool { 1 }
-
-sub stage {
-    'R->table({ objects => $pool })';
-}
 
 sub render {
     my $class = shift;
     my ($args) = @_;
-    my $objects = $args->{objects} || [];
 
-    my @rows = split(
-        /\n/,
-        format_pretty([ map { $_->as_hashref } @$objects ])
+    my @items;
+    return ppool(
+      sub { push( @items, $_ ); () },
+      sub {
+        split( /\n/, format_pretty([ map { $_->as_hashref } @items ]) );
+      },
     );
-
-    return App::Pebble::IO::ObjectArray->new( \@rows );
 }
 
 1;
