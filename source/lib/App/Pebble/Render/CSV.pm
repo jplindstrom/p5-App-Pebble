@@ -26,7 +26,7 @@ sub render {
         my ($pebble) = @_;
 
         $fields ||= [
-            grep { defined } map { $_->accessor } $pebble->meta->get_all_attributes
+            sort grep { defined } map { $_->accessor } $pebble->meta->get_all_attributes
         ];
 
         my @lines;
