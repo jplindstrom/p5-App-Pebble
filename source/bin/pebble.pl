@@ -56,6 +56,7 @@ sub main {
         $default_pre,
         $parser_stage,
         $user_stage,
+        $output_renderer,
         $default_post,
         $output_sink,
     );
