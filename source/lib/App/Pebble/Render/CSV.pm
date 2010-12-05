@@ -18,6 +18,7 @@ sub render {
     my $class = shift;
     my ($args) = @_;
     my $fields = $args->{fields};
+    $fields && ref( $fields ) ne "ARRAY" and $fields = [ $fields ];
 
     my $csv = $class->get_csv( $args );
 
