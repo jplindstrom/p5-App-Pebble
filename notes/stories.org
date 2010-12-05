@@ -40,7 +40,7 @@
 **** p -s --has=url urls.txt | p --grep url=/imdb.com/ | p --map '{ Web->get($url)' --parse=XPath --xpath=director='//
 * STORIES
 ** Move main to App::Pebble
-** use $pebble by default in table renderer
+** DONE use $pebble by default in table renderer
 ** Lexical vars for each attribute
 ** DONE Does the control ones need stringification?
 *** no
