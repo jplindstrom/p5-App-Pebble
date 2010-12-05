@@ -43,6 +43,12 @@ sub pipeline {
   
 }
 
+sub plimit ($) {
+    my ($limit) = @_;
+
+    my $count = 0;
+    return pgrep { $count++ < $limit; }
+}
 
 =head1 AUTHOR
 

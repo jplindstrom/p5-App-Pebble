@@ -39,18 +39,21 @@
 **** p -s --has=url urls.txt | p --grep '{ $url =~ /imdb.com/ }' | p html=Web-get(url) | p --with=html -parse=XPath --xpath=...
 **** p -s --has=url urls.txt | p --grep url=/imdb.com/ | p --map '{ Web->get($url)' --parse=XPath --xpath=director='//
 * STORIES
-** Move main to App::Pebble
-** DONE use $pebble by default in table renderer
-** Lexical vars for each attribute
+** DONE Move main to App::Pebble
 ** DONE Does the control ones need stringification?
 *** no
 *** 
-** plimit
+** DONE plimit
+** Lexical vars for each attribute
 ** psort
 ** collect_pool
 *** pool, but collects all the items and pass the whole lot to a single post sub
 ** psort
 *** return new IO stream
+** Nicer error reporting
+Not enough arguments for App::Pebble::plimit at (eval 221) line 4, near "plimit |"
+	...propagated at lib/App/Pebble.pm line 42.
+
 ** p -m --Match --has=abc,def,ghi or named captures
 ** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
 ** p -p --print (this is also the default action altogether)
