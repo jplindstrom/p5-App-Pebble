@@ -5,22 +5,14 @@ use strict;
 use warnings;
 
 use Getopt::Long;
-use IO::Pipeline;
-
 use Data::Dumper;
 
 use lib "lib";
 use App::Pebble;
-use App::Pebble::IO::ObjectArray;
-use aliased "App::Pebble::Object" => "P";
-use aliased "App::Pebble::Render" => "R";
 
 #TODO: plugin system
 use App::Pebble::Command::df;
 use App::Pebble::Command::du;
-
-no warnings "once";
-*p = *pmap;
 
 main();
 sub main {
