@@ -29,6 +29,7 @@ sub render {
         $fields ||= [
             sort grep { defined } map { $_->accessor } $pebble->meta->get_all_attributes
         ];
+        #TODO: validate field names
 
         my @lines;
         if( $pending_first_line ) {
