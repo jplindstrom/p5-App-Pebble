@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+# -*- mode: cperl; cperl-indent-level: 4; -*-
+
 use strict;
 use warnings;
 
