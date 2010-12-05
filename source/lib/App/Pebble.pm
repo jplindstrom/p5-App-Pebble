@@ -34,9 +34,9 @@ sub pipeline {
     my $self = shift;
     my ($stages, $input_source, $input_source_fh) = @_;
 
-    my @pipes = grep { $_ } @$stages;
-    my $pipeline_perl = join( " |\n", @pipes );
-#    print "((($pipeline_perl)))\n";
+    @$stages = grep { $_ } @$stages;
+    my $pipeline_perl = join( " |\n", @$stages );
+# print "((($pipeline_perl)))\n";
 
     eval $pipeline_perl;
     $@ and die;
