@@ -5,7 +5,10 @@ use warnings;
 use Getopt::Long;
 use IO::Pipeline;
 
+use Data::Dumper;
+
 use lib "lib";
+use App::Pebble::IO::ObjectArray;
 use aliased "App::Pebble::Object" => "P";
 use aliased "App::Pebble::Render" => "R";
 
@@ -16,13 +19,22 @@ use aliased "App::Pebble::Command::du" => "du";
 no warnings "once";
 *p = *pmap;
 
-main();
+our @pool;
+our $STREAM = App::Pebble::IO::ObjectArray->new( \@pool );
+sub pool {
+    @pool = ();
+    $STREAM->seek( 0, 0 );
 
+    return psink { push( @pool, $_ ); };
+}
+
+main();
 sub main {
     GetOptions(
         "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
-        "default_post:s" => \( my $default_post = 'pmap { "$_\n" }' ),
+        "default_post:s" => \( my $default_post ),
         "parser:s"       => \( my $parser ),
+        "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
     );
 
@@ -36,6 +48,14 @@ sub main {
         $input_source = '$input_source_fh';
     };
 
+    my $output_sink = q{\*STDOUT};
+    if( $output_renderer ) {
+        $output_sink = $output_renderer;
+    }
+    else {
+        $default_post ||= 'pmap { "$_\n" }';
+    }
+
     my $parser_stage;
     $parser and $parser_stage ||= "$parser->parser";
 
@@ -47,10 +67,12 @@ sub main {
         $parser_stage,
         $user_stage,
         $default_post,
-        q{\*STDOUT}
+        $output_sink,
     );
 
-    eval join( " |\n", @pipes );
+    my $pipeline_perl = join( " |\n", @pipes );
+    print "((($pipeline_perl)))\n";
+    eval $pipeline_perl;
     $@ and die;
 }
 
