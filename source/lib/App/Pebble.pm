@@ -14,6 +14,9 @@ use strict;
 
 The Unix idea of a stream of lines, on steroids.
 
+Note: This is alpha, pure R&D at this stage; just trying out a good
+way to do things.
+
 =head1 AUTHOR
 
 Johan Lindstrom, C<< <johanl at cpan.org> >>
