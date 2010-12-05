@@ -39,10 +39,12 @@
 **** p -s --has=url urls.txt | p --grep '{ $url =~ /imdb.com/ }' | p html=Web-get(url) | p --with=html -parse=XPath --xpath=...
 **** p -s --has=url urls.txt | p --grep url=/imdb.com/ | p --map '{ Web->get($url)' --parse=XPath --xpath=director='//
 * STORIES
-** First output Pebble::Object definition
-** Input Pebble::Object definition
-** new object definition can come at any time in the stream
-*** But is ignored unless first?
+** Move main to App::Pebble
+** use $pebble by default in table renderer
+** Lexical vars for each attribute
+** Does the control ones need stringification?
+** psort
+*** return new IO stream
 ** p -m --Match --has=abc,def,ghi or named captures
 ** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
 ** p -p --print (this is also the default action altogether)
