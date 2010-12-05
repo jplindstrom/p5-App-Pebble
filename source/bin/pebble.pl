@@ -10,6 +10,7 @@ use IO::Pipeline;
 use Data::Dumper;
 
 use lib "lib";
+use App::Pebble;
 use App::Pebble::IO::ObjectArray;
 use aliased "App::Pebble::Object" => "P";
 use aliased "App::Pebble::Render" => "R";
@@ -38,7 +39,7 @@ sub main {
         $parser ||= "App::Pebble::Command::$command";
         my $command_class = "App::Pebble::Command::$command";
         $input_source_fh = $command_class->run( $cmd );
-        
+
         $input_source = '$input_source_fh';
     };
 
@@ -52,20 +53,19 @@ sub main {
 
     my ($user_stage) = @ARGV;
     $user_stage ||= 'pmap { $_ }';
-    my @pipes = grep { $_ } (
-        $input_source,
-        $default_pre,
-        $parser_stage,
-        $user_stage,
-        $output_renderer,
-        $default_post,
-        $output_sink,
-    );
 
-    my $pipeline_perl = join( " |\n", @pipes );
-#    print "((($pipeline_perl)))\n";
-    eval $pipeline_perl;
-    $@ and die;
+    App::Pebble->pipeline(
+        [
+            $input_source,
+            $default_pre,
+            $parser_stage,
+            $user_stage,
+            $output_renderer,
+            $default_post,
+            $output_sink,
+        ],
+        $input_source => $input_source_fh,
+      );
 }
 
 
