@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-App::Pebble - Unix like streams, but with objects intead of lines of text
+App::Pebble - Unix like streams, but with objects instead of lines of text
 
 =cut
 
