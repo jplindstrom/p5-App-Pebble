@@ -19,20 +19,20 @@ use aliased "App::Pebble::Command::du" => "du";
 no warnings "once";
 *p = *pmap;
 
-our @pool;
-our $STREAM = App::Pebble::IO::ObjectArray->new( \@pool );
+our $pool;
+our $STREAM = App::Pebble::IO::ObjectArray->new( $pool );
 sub pool {
-    @pool = ();
+    @$pool = ();
     $STREAM->seek( 0, 0 );
 
-    return psink { push( @pool, $_ ); };
+    return psink { push( @$pool, $_ ); };
 }
 
 main();
 sub main {
     GetOptions(
         "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
-        "default_post:s" => \( my $default_post ),
+        "default_post:s" => \( my $default_post = 'pmap { "$_\n" }' ),
         "parser:s"       => \( my $parser ),
         "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
@@ -66,6 +66,7 @@ sub main {
         $default_pre,
         $parser_stage,
         $user_stage,
+        'p { $_ }',  # in case the $user_stage ends with a file handle
         $default_post,
         $output_sink,
     );
