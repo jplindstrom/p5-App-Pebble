@@ -6,7 +6,7 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
 
 =head1 SYNOPSIS
 
-  ## Work with lines of text
+=head2 Work with lines of text
 
   # pgrep, pn: Filter out POD lines, add a \n
   cat lib/App/Pebble.pm | pebble 'pgrep { /^=/ } | pn'
@@ -20,7 +20,7 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
   =head1 NAME
   =head1 SYNOPSIS
 
-  ## Work with objects
+=head2 Work with objects
 
   # P->match: Parse matching lines into objects with named attributes.
   # The default output format is one-line JSON.
@@ -58,7 +58,7 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
   1,DESCRIPTION
 
 
-  ## Filtering objects
+=head2 Filtering objects
 
   # pgrep: Filter out headings with too long text
   cat lib/App/Pebble.pm | \
@@ -70,6 +70,8 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
   |     1 | NAME |
   |     1 | BUGS |
   '-------+------'
+
+=head2 Transforming objects
 
   # p / pmap: Shorten the text value to at most 5 chars
   # "pmap" is so commonly used it's aliased to "p" for convenience.
@@ -84,8 +86,9 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
   |     1 | DESCR |
   ...
 
+###TODO: local variables
 
-  ## Work with predefined commands
+=head2 Work with predefined commands
 
   # --cmd=df: Run "df -k" and parse the output
   p --cmd=df --out=table 'plimit 2'
