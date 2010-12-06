@@ -4,6 +4,98 @@
 
 App::Pebble - Unix like streams, but with objects instead of lines of text
 
+=head1 SYNOPSIS
+
+  ## Work with lines of text
+
+  # pgrep, pn: Filter out POD lines, add a \n
+  cat lib/App/Pebble.pm | pebble 'pgrep { /^=/ } | pn'
+  =head1 NAME
+  =head1 SYNOPSIS
+  =head1 DESCRIPTION
+  ...
+
+  # The same, limit output to 2 lines
+  cat lib/App/Pebble.pm | p 'pgrep { /^=head/ } | plimit 2 | pn'
+  =head1 NAME
+  =head1 SYNOPSIS
+
+  ## Work with objects
+
+  # P->match: Parse matching lines into objects with named attributes.
+  # The default output format is one-line JSON.
+  cat lib/App/Pebble.pm | \
+  p 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })'
+  {"level":"1","text":"NAME"}
+  {"level":"1","text":"SYNOPSIS"}
+  {"level":"1","text":"DESCRIPTION"}
+  ...
+
+  ###TODO: split
+
+  ###TODO: parsers
+
+  # R->table: Do the same, but provide a Renderer (table) as the final stage
+  cat lib/App/Pebble.pm | \
+  p 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] }) | R->table'
+  .-------------------------------.
+  | level | text                  |
+  +-------+-----------------------+
+  |     1 | NAME                  |
+  |     1 | SYNOPSIS              |
+  |     1 | DESCRIPTION           |
+  ...
+  '-------+-----------------------'
+
+  # --out=CSV: Do the same, but provide a CSV renderer on the command line,
+  # not as the final stage.
+  # You can install more renderers, and write your own.
+  cat lib/App/Pebble.pm | \
+  p --out=CSV 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })'
+  level,text
+  1,NAME
+  1,SYNOPSIS
+  1,DESCRIPTION
+
+
+  ## Filtering objects
+
+  # pgrep: Filter out headings with too long text
+  cat lib/App/Pebble.pm | \
+  p --out=table 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })
+  | pgrep { length( $_->text) < 5 }'
+  .--------------.
+  | level | text |
+  +-------+------+
+  |     1 | NAME |
+  |     1 | BUGS |
+  '-------+------'
+
+  # p / pmap: Shorten the text value to at most 5 chars
+  # "pmap" is so commonly used it's aliased to "p" for convenience.
+  # Note that you still want the object itself to be passed along in the stream,
+  # so you need to end the block with $_;
+  cat lib/App/Pebble.pm | p --out=table 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] }) | p { $_->text( substr($_->text, 0, 5 )); $_ }'
+  .---------------.
+  | level | text  |
+  +-------+-------+
+  |     1 | NAME  |
+  |     1 | SYNOP |
+  |     1 | DESCR |
+  ...
+
+
+  ## Work with predefined commands
+
+  # --cmd=df: Run "df -k" and parse the output
+  p --cmd=df --out=table 'plimit 2'
+  .--------------------------------------------------------------------------.
+  | available | blocks    | capacity | filesystem   | mounted_on | used      |
+  +-----------+-----------+----------+--------------+------------+-----------+
+  |  21856800 | 976101344 |       98 | /dev/disk0s2 | /          | 953732544 |
+  |         0 |       216 |      100 | devfs        | /dev       |       216 |
+  '-----------+-----------+----------+--------------+------------+-----------'
+
 =cut
 
 package App::Pebble;
@@ -21,7 +113,7 @@ use App::Pebble::Command::du;
 no warnings "once";
 *p = *pmap;
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
 The Unix idea of a stream of lines, on steroids.
 
@@ -40,7 +132,7 @@ sub pipeline {
 
     eval $pipeline_perl;
     $@ and die;
-  
+
 }
 
 sub plimit ($) {
@@ -48,6 +140,10 @@ sub plimit ($) {
 
     my $count = 0;
     return pgrep { $count++ < $limit; }
+}
+
+sub pn () {
+    return pmap { "$_\n" };
 }
 
 =head1 AUTHOR
