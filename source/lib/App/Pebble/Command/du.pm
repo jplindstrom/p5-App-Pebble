@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-App::Pebble::Command::Df - Command to run "du -sk" something
+App::Pebble::Command::df - Command to run "du -sk" something
 
 =cut
 

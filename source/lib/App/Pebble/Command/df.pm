@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-App::Pebble::Command::Df - Command to run "df"
+App::Pebble::Command::df - Command to run "df"
 
 =cut
 
