@@ -46,7 +46,7 @@ sub main {
     my ($user_stage) = @ARGV;
     $user_stage ||= 'pmap { $_ }';
 
-    App::Pebble->pipeline(
+    App::Pebble->new->pipeline(
         [
             $input_source,
             $default_pre,

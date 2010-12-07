@@ -103,6 +103,7 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
 
 package App::Pebble;
 use Moose;
+use MooseX::Method::Signatures;
 
 use IO::Pipeline;
 
@@ -125,10 +126,7 @@ way to do things.
 
 =cut
 
-sub pipeline {
-    my $self = shift;
-    my ($stages, $input_source, $input_source_fh) = @_;
-
+method pipeline( $stages, $input_source, $input_source_fh ) {
     @$stages = grep { $_ } @$stages;
     my $pipeline_perl = join( " |\n", @$stages );
 # print "((($pipeline_perl)))\n";
