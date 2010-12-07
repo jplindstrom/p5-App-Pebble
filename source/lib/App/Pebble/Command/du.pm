@@ -9,15 +9,14 @@ package App::Pebble::Command::du;
 use Moose;
 extends "App::Pebble::Command";
 
+use MooseX::Method::Signatures;
+
 use App::Pebble::Object;
 
 sub name    { "du" }
 sub command { "du -sk" }
 
-sub parser {
-    my $class = shift;
-    my ($args) = @_;
-
+method parser($class: $args?) {
     return App::Pebble::Object->match({
         regex => qr/(\S+) \s+ (\S+)/x,
         has   => [  "size",   "file" ],

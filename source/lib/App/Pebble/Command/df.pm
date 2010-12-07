@@ -9,15 +9,14 @@ package App::Pebble::Command::df;
 use Moose;
 extends "App::Pebble::Command";
 
+use MooseX::Method::Signatures;
+
 use App::Pebble::Object;
 
 sub name    { "df" }
 sub command { "df" }
 
-sub parser {
-    my $class = shift;
-    my ($args) = @_;
-
+method parser($class: $args?) {
     return App::Pebble::Object->match({
         regex =>  qr/ (.+?) \s+  (\d+) \s+ (\d+) \s+ (\d+) \s+ (\d+)% \s+ (.+)      $/x,
         has   => [qw/ filesystem blocks    used      available capacity   mounted_on /]
