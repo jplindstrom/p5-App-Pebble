@@ -9,15 +9,14 @@ package App::Pebble::Render::table;
 use Moose;
 extends "App::Pebble::Render";
 
+use MooseX::Method::Signatures;
+
 use Data::Format::Pretty::Console qw(format_pretty);
 use IO::Pipeline;
 
-sub needs_pool { 1 }
+method needs_pool { 1 }
 
-sub render {
-    my $class = shift;
-    my ($args) = @_;
-
+method render($class: $args?) {
     my @items;
     return ppool(
       sub { push( @items, $_ ); () },

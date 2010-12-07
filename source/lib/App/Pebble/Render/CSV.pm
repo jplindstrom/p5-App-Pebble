@@ -9,14 +9,14 @@ package App::Pebble::Render::CSV;
 use Moose;
 extends "App::Pebble::Render";
 
+use MooseX::Method::Signatures;
+
 use IO::Pipeline;
 use Text::CSV_XS;
 
 use Data::Dumper;
 
-sub render {
-    my $class = shift;
-    my ($args) = @_;
+method render($class: $args?) {
     my $fields = $args->{fields};
     $fields && ref( $fields ) ne "ARRAY" and $fields = [ $fields ];
 
@@ -47,8 +47,7 @@ sub render {
     };
 }
 
-sub get_csv {
-    my $class = shift;
+method get_csv($class: $args?) {
     return Text::CSV_XS->new ({ binary => 1 })
             or die "Cannot use CSV: ".Text::CSV->error_diag ();
     
