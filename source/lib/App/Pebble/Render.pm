@@ -7,6 +7,8 @@ App::Pebble::Render - Base class for Pebble renderers
 
 package App::Pebble::Render;
 use Moose;
+use MooseX::Method::Signatures;
+
 use App::Pebble::Render::CSV;
 use App::Pebble::Render::table;
 
