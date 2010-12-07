@@ -93,6 +93,7 @@ sub as_hashref {
     my $self = shift;
     my %attr = %$self;
     delete $attr{__MOP__};
+    delete $attr{"<<MOP>>"};
     return \%attr;
 }
 
