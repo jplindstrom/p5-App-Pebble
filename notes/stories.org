@@ -58,6 +58,7 @@
 Not enough arguments for App::Pebble::plimit at (eval 221) line 4, near "plimit |"
 	...propagated at lib/App/Pebble.pm line 42.
 
+** p --cmd=df 'P->Graph->Basic->Bar({ x => "mounted_on", y => "capacity" });
 ** p -m --Match --has=abc,def,ghi or named captures
 ** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
 ** p -p --print (this is also the default action altogether)
