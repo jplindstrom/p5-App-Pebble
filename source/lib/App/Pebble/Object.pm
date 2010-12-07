@@ -6,17 +6,13 @@ App::Pebble::Object - Base class for Pebble objects
 =cut
 
 package App::Pebble::Object;
-
-use warnings;
-use strict;
+use Moose;
+use MooseX::Method::Signatures;
 
 use IO::Pipeline;
-use Moose;
 use JSON::XS;
 
-sub _meta_class {
-    my $class = shift;
-    my ($has) = @_;
+method _meta_class($class: $has) {
     @$has or die( "Can't define class: No field names provided (with 'has')\n" );
 
     my $meta_class = Moose::Meta::Class->create_anon_class(
@@ -29,10 +25,7 @@ sub _meta_class {
     return $meta_class;
 }
 
-sub _values_to_fields {
-    my $class = shift;
-    my ($has, $values) = @_;
-
+method _values_to_fields($class: $has, $values) {
     my $arg_value;
     for my $field ( @$has ) {
         $arg_value->{ $field } = shift( @$values );
@@ -41,9 +34,7 @@ sub _values_to_fields {
     return $arg_value;
 }
 
-sub split {
-    my $class = shift;
-    my ($args) = @_;
+method split($class: $args) {
     my $split = $args->{split} || qr/\s+/; 
     my $has   = $args->{has}   || [];
 
@@ -52,16 +43,12 @@ sub split {
     return pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
 }
 
-sub _split_line {
-    my $class = shift;
-    my ( $split, $has, $line ) = @_;
+method _split_line($class: $split, $has, $line) {
     my @values = split( $split, $line );
     return $class->_values_to_fields( $has, \@values );
 }
 
-sub match {
-    my $class = shift;
-    my ($args) = @_;
+method match($class: $args) {
     my $regex = $args->{regex} or die( "No regex provided\n" );
     my $has = $args->{has} || [];
 
@@ -73,15 +60,12 @@ sub match {
     };
 }
 
-sub _match_line {
-    my $class = shift;
-    my ( $regex, $has, $line ) = @_;
+method _match_line($class: $regex, $has, $line) {
     my @values = ( $line =~ $regex ) or return undef;
     return $class->_values_to_fields( $has, \@values );
 }
 
-sub as_json {
-    my $self = shift;
+method as_json {
     my $encoder = JSON::XS->new; #->pretty;
     my $json = $encoder->encode( $self->as_hashref );
     chomp( $json );
@@ -89,8 +73,7 @@ sub as_json {
     return "$json\n";
 }
 
-sub as_hashref {
-    my $self = shift;
+method as_hashref {
     my %attr = %$self;
     delete $attr{__MOP__};
     delete $attr{"<<MOP>>"};
@@ -98,9 +81,7 @@ sub as_hashref {
 }
 
 # maybe, not sure about this one at all
-sub fields {
-    my $self = shift;
-    my (@fields) = @_;
+method fields(@fields) {
     join( ", ", map { $self->$_ } @fields );
 }
  
