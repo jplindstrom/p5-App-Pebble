@@ -1,0 +1,65 @@
+* Design
+** Concepts
+*** Parser
+**** Parsers normally operate on a text stream
+***** matching a line into attributes of a new or existing Object
+**** e.g.
+***** match regex and custom list of attributes
+***** split regex and custom list of attributes
+***** regex for /etc/passwd and predefined list of attributes
+***** regex for "ls -l"
+***** regex for Apache access logs
+***** regex for your application's log file
+***** CSV
+*** Command
+**** A command is a shell command (usually) + a parser for its output
+***** e.g.
+****** df
+****** du
+****** ps
+*** Objects
+**** Moose objects
+**** Objects are classless -- kinda
+***** An object "class" is defined by its set of attributes
+**** You can transform an object into another object (and class)
+***** by removing attributes you no longer want
+***** by adding attributes and values
+***** by adding attributes from Sources
+**** The attributes of the current Object are aliased to lexicals inside a stage
+***** Instead of $_->price, just use $price for getting/setting values
+**** Attributes can have types
+***** With coercion
+***** e.g.
+****** file[Path::Class::File]
+****** url[URL]
+****** time[DateTime]
+****** duraion[DateTime::Duration]
+***** The types may be used by Renderers to influence how things are presented
+****** e.g.
+******* Whether to quote the values in
+******** INSERT INTO product (title, price) VALUES ("Light Saber", 19.95);
+******** O->new( title => "Light Saber", "price[Num]" => 19.95 )
+*** Source
+**** Utility routines
+***** e.g.
+****** S->Web->get
+****** S->XPath
+****** S->File->read
+**** This is just like normal Perl
+***** Normally wrappers around existing modules
+***** but Sources have support for putting values back
+****** into new or existing attributes of your Objects
+*** Renderer
+**** JSON
+**** XML
+**** table
+***** pools stuff
+**** CSV
+**** large_table
+**** org_table
+**** TT
+**** SQL->insert
+**** SQL->update
+**** Graph->Simple->Bar
+**** DB->connect()->insert
+**** 
