@@ -107,7 +107,7 @@ use MooseX::Method::Signatures;
 
 use IO::Pipeline;
 
-use aliased "App::Pebble::Object" => "P";
+use aliased "App::Pebble::Parse" => "P";
 use aliased "App::Pebble::Render" => "R";
 
 #TODO: plugin system

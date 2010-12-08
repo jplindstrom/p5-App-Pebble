@@ -11,13 +11,13 @@ extends "App::Pebble::Command";
 
 use MooseX::Method::Signatures;
 
-use App::Pebble::Object;
+use App::Pebble::Parse;
 
 sub name    { "df" }
 sub command { "df" }
 
 method parser($class: $args?) {
-    return App::Pebble::Object->match({
+    return App::Pebble::Parse->match({
         regex =>  qr/ (.+?) \s+  (\d+) \s+ (\d+) \s+ (\d+) \s+ (\d+)% \s+ (.+)      $/x,
         has   => [qw/ filesystem blocks    used      available capacity   mounted_on /]
     });
