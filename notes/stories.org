@@ -17,9 +17,16 @@
 *** SQLite db
 *** SQL query
 *** MySQL resultset output
-**** with ;
-**** with \G
-** Output
+**** Parse
+***** with ;
+***** with \G
+** Source
+*** Something + Parse
+*** E.g.
+**** S->Web->get($url)
+**** S->DBI->db( $connect )->select( $sql )
+**** 
+** Render
 *** Pebble / Perl
 *** Table (like SQL query)
 *** HTML table
@@ -48,6 +55,12 @@
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
 ** debug flag
+** Object creation, mutation
+*** sub O(%)
+**** O { "file[File]" => "/etc/passwd", url => $url }
+***** Create a metaclass with keys, object with values
+**** Transform
+** 
 ** Lexical vars for each attribute
 ** psort
 ** collect_pool

@@ -21,4 +21,64 @@ p --cmd=df 'pool; R->table({ objects => $pool })'
 # pebble --split --split-count=7 --split-has=month,day,time,number,error,module,message --has=date[DateTime] 'P->also_has( "date[DateTime]" ) | p { $_->date( P->parse_date(qw/ month day  /) } | pgrep { $_->month < 3 }'
 
         
-# Dec 02 16:05:32  [68] kCGErrorIllegalArgument: CGXSetWindowFilter: Invalid filter 2
+# Dec 02 16:05:32  [68] kCGErrorIllegalArgument: CGXSetWindowFilter: Invalid
+sub web_scraper_example {
+    P->split( has => "url", "id", "title" )
+    | p {
+        O->mod {
+            -delete => "url",
+            html => S->Web->get( $url ),
+        }
+    }
+    |
+    padd {
+        S->XPath(
+            url => $url,  # Get it first using S->Web->get, can aso be "file", etc.
+            value => {
+                author => "//book/author",
+            }
+        )
+    }
+    |
+    preplace {
+        html => S->XPath(
+            xml => $html,
+            value => { # text? also get attributes, etc.
+                title                   => "/html/head/title",
+                "chapter_number[Array]" => "//chapter/index",
+            },
+        ),
+    },
+  }
+}
+
+# Create object from scratch
+sub new_pobject {
+  p {
+    O->new {
+      html         => "<html>...</html>",
+      "file[File]" => $file,
+    };
+  }
+}
+
+# Create object from existing object
+# Take the definition of -object, or by default $_, and add/remove fields
+#  If -delete, delete those
+#  If -keep, delete all others
+#  If -replace, delete the keys, add the result of values
+#  If -add, add the keys and values. This is just to be able to call a Source
+# Copy any vaues from the initial object
+sub mod_object {
+  p {
+    O->mod {
+      -object => $_,
+      -delete => ["html"], # or single scalar for one
+      -keep   => ["id", "name"],
+      -add => { size => 23 }, # Or Object::Collection with keys/values
+      "title" => $title,
+      -replace => { url => { html => S->Web->get( $url ) } } # Or Object::Collection with keys/values
+    };
+  }
+}
+
