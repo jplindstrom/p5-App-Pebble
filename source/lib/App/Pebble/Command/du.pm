@@ -17,10 +17,10 @@ sub name    { "du" }
 sub command { "du -sk" }
 
 method parser($class: $args?) {
-    return App::Pebble::Parse->match({
+    return App::Pebble::Parse->match(
         regex => qr/(\S+) \s+ (\S+)/x,
         has   => [  "size",   "file" ],
-    });
+    );
 }
 
 1;

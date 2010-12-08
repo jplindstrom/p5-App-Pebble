@@ -39,9 +39,9 @@ method _split_line($class: $split, $has, $line) {
     return $class->_values_to_fields( $has, \@values );
 }
 
-method match($class: $args) {
-    my $regex = $args->{regex} or die( "No regex provided\n" );
-    my $has = $args->{has} || [];
+method match($class: :$regex, :$has?) {
+    $regex or die( "No regex provided\n" );
+    $has ||= [];
 
     my $meta_class = App::Pebble::Object->new_meta_class( $has );
 
