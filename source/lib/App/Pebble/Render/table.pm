@@ -22,7 +22,15 @@ method render($class: $args?) {
       sub { push( @items, $_ ); () },
       sub {
         @items or return "";
-        format_pretty([ map { $_->as_hashref } @items ]);
+        format_pretty([
+            map { $_->as_hashref }
+            map {
+                blessed $_ && $_->can( "as_hashref" )
+                        or die( "Stream value ($_) isn't an object, so it can't be rendered with 'table'\n" );
+                $_
+            }
+            @items
+        ]);
       },
     );
 }
