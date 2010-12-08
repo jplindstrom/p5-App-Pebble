@@ -41,7 +41,7 @@ method _split_line($class: $split, $has, $line) {
 
 method match($class: :$regex, :$has?) {
     $regex or die( "No regex provided\n" );
-    $has ||= [];
+    $has ||= []; #TODO: should also die, can't create an object without
 
     my $meta_class = App::Pebble::Object->new_meta_class( $has );
 
