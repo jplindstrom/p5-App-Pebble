@@ -54,31 +54,91 @@ sub web_scraper_example {
 
 # Create object from scratch
 sub new_pobject {
-  p {
-    O->new {
-      html         => "<html>...</html>",
-      "file[File]" => $file,
-    };
-  }
+    p {
+        O->new(
+            html         => "<html>...</html>",
+            "file[File]" => $file,
+        );
+    }
+    |
+    onew {
+        html => ... etc
+    }
+    
 }
 
 # Create object from existing object
 # Take the definition of -object, or by default $_, and add/remove fields
+#  Copy any vaues from the initial object
 #  If -delete, delete those
 #  If -keep, delete all others
-#  If -replace, delete the keys, add the result of values
+#  If -replace, delete any existing the keys, add the result of values
 #  If -add, add the keys and values. This is just to be able to call a Source
-# Copy any vaues from the initial object
+#  Add any other regular keys, values
 sub mod_object {
-  p {
-    O->mod {
-      -object => $_,
-      -delete => ["html"], # or single scalar for one
-      -keep   => ["id", "name"],
-      -add => { size => 23 }, # Or Object::Collection with keys/values
-      "title" => $title,
-      -replace => { url => { html => S->Web->get( $url ) } } # Or Object::Collection with keys/values
-    };
-  }
+    p {
+        O->mod {
+            -object  => $_,
+            -delete  => ["html"], # or single scalar for one
+            -keep    => ["id", "name"],
+            -add     => { size => 23 }, # Or Object::Collection with keys/values
+            -replace => { url => { html => S->Web->get( $url ) } } # Or Object::Collection with keys/values
+            "title"  => $title,
+        };
+    }
 }
+
+# pipe dream:
+# pconcurrent would need to be a IO endpoint collecting the objects,
+# funneling then to workers and restoring them to the end of a new
+# pipeline.
+# Can you freeze Moose objects and anonymous meta classes? They would
+# need to go both ways.
+sub concurrency {
+    p { 1..10 }
+    | pnew { url => "http://abc/$_" }
+    | pconcurrent {
+        oadd { html => S->Web->get( $url ) }
+    }
+    | pkeep { "url" }
+}
+
+# 
+sub get_missing_bc {
+      p { 1..10 } # days back
+    | p { DateTime->now->subtract( days => $_ ) }
+    | pdebug # warn nice Dumper or something
+    | onew { date => $_ }
+    | oadd {
+        start_time => $date,
+        end_time   => $date->clone->add( days => 1 ),
+    }
+    | oadd {
+        "bc_pid[Array]" => S->XPath(
+            url  => "http://piabcps/bc/start/$start_time/end/$end_time/",
+            text => { "pid[num]" => "//change_to/@pid" },
+        ),
+    }
+    | p { map { O->new( pid => $_ ) } @$bc_pid }
+    # or: onew_from_field { bc_pid => "pid" }
+    | oadd {
+        S->XPath(
+            url => "http:/dynabcte/idtype/id/$pid",
+            text => { exists => "//type/[ text() = 'bc' ]}" },
+        );
+    }
+    | pgrep { $exists }
+    | p {
+        O->mod(
+            -keep => "pid",
+            -add => {
+                "cache_time[Int]" => 18600,
+                "duration[Int]"   => 3600,
+                "url"             => "http://piabcs/bc/$pid",
+            },
+        );
+    }
+    | p { R->SQL( "mysql" )->insert( "change" ) }
+}
+
 
