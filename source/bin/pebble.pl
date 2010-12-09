@@ -7,7 +7,7 @@ use warnings;
 use Getopt::Long;
 use Data::Dumper;
 
-use lib "lib";
+use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
 
 #TODO: plugin system
