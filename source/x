@@ -30,8 +30,7 @@ sub web_scraper_example {
             html => S->Web->get( $url ),
         }
     }
-    |
-    padd {
+    | oadd {
         S->XPath(
             url => $url,  # Get it first using S->Web->get, can aso be "file", etc.
             value => {
@@ -39,8 +38,7 @@ sub web_scraper_example {
             }
         )
     }
-    |
-    preplace {
+    | oreplace {
         html => S->XPath(
             xml => $html,
             value => { # text? also get attributes, etc.
