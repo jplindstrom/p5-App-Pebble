@@ -9,7 +9,8 @@ project:
 
   #Extra @INC directories, relative to the project root
   #These come before the default inc directories "." and "lib"
-  inc_dir: []
+  inc_dir:
+    - ../../p5-Pebble-Object/source/lib
 
 
 #Bookmarks are regexes that may match against a single line.
