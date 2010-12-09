@@ -8,7 +8,8 @@ App::Pebble::Command - Base class for Pebble Commands
 package App::Pebble::Command;
 use Moose;
 use MooseX::Method::Signatures;
-use App::Pebble::Object;
+use Pebble::Object;
+
 
 sub name    { undef }
 sub command { undef }

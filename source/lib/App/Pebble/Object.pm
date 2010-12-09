@@ -5,7 +5,7 @@ App::Pebble::Object - Base class for Pebble objects
 
 =cut
 
-package App::Pebble::Object;
+package Pebble::Object;
 use Moose;
 use MooseX::Method::Signatures;
 
