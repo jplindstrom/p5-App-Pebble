@@ -23,7 +23,7 @@ p --cmd=df 'pool; R->table({ objects => $pool })'
         
 # Dec 02 16:05:32  [68] kCGErrorIllegalArgument: CGXSetWindowFilter: Invalid
 sub web_scraper_example {
-    P->split( has => "url", "id", "title" )
+      p { P->split( has => "url", "id", "title" ) }
     | p {
         O->mod {
             -delete => "url",
@@ -112,13 +112,13 @@ sub get_missing_bc {
         end_time   => $date->clone->add( days => 1 ),
     }
     | oadd {
-        "bc_pid[Array]" => S->XPath(
+        S->XPath(
             url  => "http://piabcps/bc/start/$start_time/end/$end_time/",
-            text => { "pid[num]" => "//change_to/@pid" },
+            text => { "bc_pid[Array]" => '//change_to/@pid' },
         ),
     }
-    | p { map { O->new( pid => $_ ) } @$bc_pid }
-    # or: onew_from_field { bc_pid => "pid" }
+    | p { map { O->new( "pid[Num]" => $_ ) } @$bc_pid }
+    # or: onew_from_field { bc_pid => "pid[Num]" } # really?
     | oadd {
         S->XPath(
             url => "http:/dynabcte/idtype/id/$pid",
@@ -138,5 +138,4 @@ sub get_missing_bc {
     }
     | p { R->SQL( "mysql" )->insert( "change" ) }
 }
-
 
