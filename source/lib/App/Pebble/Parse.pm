@@ -12,7 +12,7 @@ use MooseX::Method::Signatures;
 use IO::Pipeline;
 use JSON::XS;
 
-use Pebble::Object;
+use Pebble::Object::Class;
 
 method _values_to_fields($class: $has, $values) {
     my $arg_value;
@@ -29,7 +29,7 @@ method split($class: $args) {
     my $split = $args->{split} || qr/\s+/; 
     my $has   = $args->{has}   || [];
 
-    my $meta_class = Pebble::Object->new_meta_class( $has );
+    my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
     return pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
 }
@@ -43,7 +43,7 @@ method match($class: :$regex, :$has?) {
     $regex or die( "No regex provided\n" );
     $has ||= []; #TODO: should also die, can't create an object without
 
-    my $meta_class = Pebble::Object->new_meta_class( $has );
+    my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
     return pmap {
         my $args = $class->_match_line( $regex, $has, $_ );
