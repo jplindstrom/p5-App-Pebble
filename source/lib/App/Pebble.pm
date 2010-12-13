@@ -167,28 +167,28 @@ sub oadd     (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
-        O->mod( -add => { %arg } )
+        O->modify( -add => { %arg } )
     };
 }
 sub oreplace (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
-        O->mod( -replace => { %arg } );
+        O->modify( -replace => { %arg } );
     };
 }
 sub okeep    (&) {
     my $subref = shift;
     return pmap {
         my @args  = $subref->();
-        O->mod( -keep => [ @args ] );
+        O->modify( -keep => [ @args ] );
     };
 }
 sub odelete  (&) {
     my $subref = shift;
     return pmap {
         my @args = $subref->();
-        O->mod( -delete => [ @args ] );
+        O->modify( -delete => [ @args ] );
     };
 }
 
