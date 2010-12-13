@@ -109,6 +109,7 @@ use IO::Pipeline;
 
 use aliased "App::Pebble::Parse" => "P";
 use aliased "App::Pebble::Render" => "R";
+use aliased "Pebble::Object::Class" => "O";
 
 #TODO: plugin system
 use App::Pebble::Command::df;
@@ -145,6 +146,50 @@ sub plimit ($) {
 
 sub pn () {
     return pmap { "$_\n" };
+}
+
+sub onew     (&) {
+    my $subref = shift;
+    return pmap {
+        my %arg  = $subref->();
+        O->new( %arg );
+    };
+}
+
+sub omod     (&) {
+    my $subref = shift;
+    return pmap {
+        my %arg  = $subref->();
+        O->mod( %arg );
+    };
+}
+sub oadd     (&) {
+    my $subref = shift;
+    return pmap {
+        my %arg  = $subref->();
+        O->mod( -add => { %arg } )
+    };
+}
+sub oreplace (&) {
+    my $subref = shift;
+    return pmap {
+        my %arg  = $subref->();
+        O->mod( -replace => { %arg } );
+    };
+}
+sub okeep    (&) {
+    my $subref = shift;
+    return pmap {
+        my @args  = $subref->();
+        O->mod( -keep => [ @args ] );
+    };
+}
+sub odelete  (&) {
+    my $subref = shift;
+    return pmap {
+        my @args = $subref->();
+        O->mod( -delete => [ @args ] );
+    };
 }
 
 =head1 AUTHOR
