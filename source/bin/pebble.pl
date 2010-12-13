@@ -6,6 +6,8 @@ use warnings;
 
 use Getopt::Long;
 use Data::Dumper;
+use File::HomeDir;
+use Cache::File;
 
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
@@ -22,6 +24,7 @@ sub main {
         "parser:s"       => \( my $parser ),
         "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
+        "web_cache:s"    => \( my $web_cache ),
     );
 
     my $input_source = q{\*STDIN};
@@ -46,7 +49,17 @@ sub main {
     my ($user_stage) = @ARGV;
     $user_stage ||= 'pmap { $_ }';
 
-    App::Pebble->new->pipeline(
+
+    my $pebble = App::Pebble->new;
+
+    if( defined $web_cache ) {
+        my $cache_dir = File::HomeDir->my_dist_data( 'App-Pebble-web', { create => 1 } );
+warn "CACHE DIR: $cache_dir\n";        
+        my $cache = App::Pebble->cache( Cache::File->new( cache_root => $cache_dir ) );
+        $web_cache eq "flush" and $cache->clear();
+    }
+
+    $pebble->pipeline(
         [
             $input_source,
             $default_pre,
