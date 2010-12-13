@@ -10,15 +10,21 @@ use Moose;
 
 use MooseX::Method::Signatures;
 
-use URI::Fetch;
+use LWP::UserAgent::WithCache;
 use Data::Dumper;
 
-method get($class: $url) {
+method get_response($class: $url) {
     require App::Pebble;
 
-    warn "START ($url)\n";
-    my $res = URI::Fetch->fetch( $url, Cache => App::Pebble->cache );
-    warn "END\n";
+    my $ua = LWP::UserAgent::WithCache->new();
+    $ua->{cache} = App::Pebble->cache; # so sue me, provide a useful interface then
+    my $res = $ua->get( $url ) or return undef;
+    return $res;
+}
+
+method get($class: $url) {
+    my $res = $class->get_response( $url );
+    $res or return undef;
     return $res->content;
 }
 
