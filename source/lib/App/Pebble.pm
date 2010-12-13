@@ -103,6 +103,7 @@ App::Pebble - Unix like streams, but with objects instead of lines of text
 
 package App::Pebble;
 use Moose;
+use MooseX::ClassAttribute;
 use MooseX::Method::Signatures;
 
 use IO::Pipeline;
@@ -110,6 +111,7 @@ use IO::Pipeline;
 use aliased "App::Pebble::Parse" => "P";
 use aliased "App::Pebble::Render" => "R";
 use aliased "Pebble::Object::Class" => "O";
+use aliased "App::Pebble::Source" => "S";
 
 #TODO: plugin system
 use App::Pebble::Command::df;
@@ -127,10 +129,26 @@ way to do things.
 
 =cut
 
+
+=head1 CLASS ATTRIBUTES
+
+=head2 cache[ Cache::Cache | undef ]
+
+Optional cache object, used for e.g. web requests.
+
+=cut
+
+class_has cache => ( is => "rw" );
+
+
+=head1 METHODS
+
+=cut
+
 method pipeline( $stages, $input_source, $input_source_fh ) {
     @$stages = grep { $_ } @$stages;
     my $pipeline_perl = join( " |\n", @$stages );
-# print "((($pipeline_perl)))\n";
+ print "((($pipeline_perl)))\n";
 
     eval $pipeline_perl;
     $@ and die;
@@ -147,6 +165,8 @@ sub plimit ($) {
 sub pn () {
     return pmap { "$_\n" };
 }
+
+# TODO? Refactor these, or keep inlined for clarity and perf?
 
 sub onew     (&) {
     my $subref = shift;
