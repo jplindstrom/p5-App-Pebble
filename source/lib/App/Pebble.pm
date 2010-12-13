@@ -156,11 +156,11 @@ sub onew     (&) {
     };
 }
 
-sub omod     (&) {
+sub omodify     (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
-        O->mod( %arg );
+        O->modify( %arg );
     };
 }
 sub oadd     (&) {
