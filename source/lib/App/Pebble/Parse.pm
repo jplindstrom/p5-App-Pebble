@@ -28,6 +28,7 @@ method _values_to_fields($class: $has, $values) {
 method split($class: $args) {
     my $split = $args->{split} || qr/\s+/; 
     my $has   = $args->{has}   || [];
+    (ref $has eq "ARRAY") or $has = [ $has ];  ###TODO: refactor
 
     my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
@@ -42,6 +43,7 @@ method _split_line($class: $split, $has, $line) {
 method match($class: :$regex, :$has?) {
     $regex or die( "No regex provided\n" );
     $has ||= []; #TODO: should also die, can't create an object without
+    (ref $has eq "ARRAY") or $has = [ $has ];  ###TODO: refactor
 
     my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
