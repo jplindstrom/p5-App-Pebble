@@ -1,0 +1,5 @@
+  p { S->Web->get( "http://www.imdb.com/find?s=all&q=$_" ) }
+  | P->match( regex => qr|Popular\sTitles .+? <a\s+href="/title/(\w+)/"|xsm, has => "imdb_id" )
+  | oadd { imdb_url => "http://www.imdb.com/title/" . $_->imdb_id }
+  | oadd { html => S->Web->get( $_->imdb_url ) }
+  | onew { url => $_->imdb_url, id => $_->imdb_id }

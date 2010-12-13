@@ -60,7 +60,11 @@
 **** O { "file[File]" => "/etc/passwd", url => $url }
 ***** Create a metaclass with keys, object with values
 **** Transform
-** 
+** Unify the R->, S-> etc
+*** whether they're inside a p {} or not
+** Unify Render / Renderer naming
+** Global cache manager, for e.g. caching http requests
+*** can be reset for all, or for a type e.g. Web
 ** Lexical vars for each attribute
 ** psort
 ** collect_pool
