@@ -7,7 +7,7 @@ use warnings;
 use Getopt::Long;
 use Data::Dumper;
 use File::HomeDir;
-use Cache::File;
+use Cache::FileCache;
 
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
@@ -55,7 +55,7 @@ sub main {
     if( defined $web_cache ) {
         my $cache_dir = File::HomeDir->my_dist_data( 'App-Pebble-web', { create => 1 } );
 warn "CACHE DIR: $cache_dir\n";        
-        my $cache = App::Pebble->cache( Cache::File->new( cache_root => $cache_dir ) );
+        my $cache = App::Pebble->cache( Cache::FileCache->new({ cache_root => $cache_dir }) );
         $web_cache eq "flush" and $cache->clear();
     }
 
