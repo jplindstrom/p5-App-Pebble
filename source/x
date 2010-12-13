@@ -8,8 +8,6 @@ has => [qw/ date error module message /] }) | pgrep { $_->date =~ /:20/ }'
 
 /bin/pebble.pl
 
-
-p --cmd=df 'pool; R->table({ objects => $pool })'
         
 # less -S /var/log/windowserver.log | ./bin/pebble.pl \
 # 'App::Pebble::Object->match({
@@ -68,9 +66,9 @@ sub new_pobject {
 # Create object from existing object
 # Take the definition of -object, or by default $_, and add/remove fields
 #  Copy any vaues from the initial object
-#  If -delete, delete those
 #  If -keep, delete all others
-#  If -replace, delete any existing the keys, add the result of values
+#  If -delete, delete those
+#  If -replace, delete any existing keys, add the result of values
 #  If -add, add the keys and values. This is just to be able to call a Source
 #  Add any other regular keys, values
 sub mod_object {

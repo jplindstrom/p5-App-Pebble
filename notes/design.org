@@ -11,6 +11,8 @@
 ***** regex for Apache access logs
 ***** regex for your application's log file
 ***** CSV
+**** You can write your own parsers, for your app's log files, etc.
+**** Plugins loaded from various places
 *** Command
 **** A command is a shell command (usually) + a parser for its output
 ***** e.g.
@@ -21,13 +23,14 @@
 **** Moose objects
 **** Objects are classless -- kinda
 ***** An object "class" is defined by its set of attributes
+***** So, prototype based OO
 **** You can transform an object into another object (and class)
 ***** by removing attributes you no longer want
 ***** by adding attributes and values
 ***** by adding attributes from Sources
 **** The attributes of the current Object are aliased to lexicals inside a stage
 ***** Instead of $_->price, just use $price for getting/setting values
-**** Attributes can have types
+**** Attributes can have types (TODO)
 ***** With coercion
 ***** e.g.
 ****** file[Path::Class::File]
@@ -45,10 +48,14 @@
 ****** S->Web->get
 ****** S->XPath
 ****** S->File->read
+****** S->Time
+******* now
+******* parse
 **** This is just like normal Perl
 ***** Normally wrappers around existing modules
 ***** but Sources have support for putting values back
 ****** into new or existing attributes of your Objects
+***** Optimized for the common case, and brevity
 *** Renderer
 **** JSON
 **** XML
