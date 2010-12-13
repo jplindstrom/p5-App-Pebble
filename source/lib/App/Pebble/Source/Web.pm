@@ -25,6 +25,7 @@ method get_response($class: $url) {
 method get($class: $url) {
     my $res = $class->get_response( $url );
     $res or return undef;
+#    warn "LENGTH ($url): " . length($res->content) . "\n";
     return $res->content;
 }
 
