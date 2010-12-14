@@ -29,7 +29,7 @@ sub web_scraper_example {
         }
     }
     | oadd {
-        S->XPath(
+        S->XPath->match(
             url => $url,  # Get it first using S->Web->get, can aso be "file", etc.
             value => {
                 author => "//book/author",
@@ -37,11 +37,13 @@ sub web_scraper_example {
         )
     }
     | oreplace {
-        html => S->XPath(
-            xml => $html,
-            value => { # text? also get attributes, etc.
-                title                   => "/html/head/title",
-                "chapter_number[Array]" => "//chapter/index",
+        html => {
+            S->XPath->match(
+                xml => $html,
+                value => { # text? also get attributes, etc.
+                    title                   => "/html/head/title",
+                    "chapter_number[Array]" => "//chapter/index",
+                },
             },
         ),
     },
@@ -110,7 +112,7 @@ sub get_missing_bc {
         end_time   => $date->clone->add( days => 1 ),
     }
     | oadd {
-        S->XPath(
+        S->XPath->match(
             url  => "http://piabcps/bc/start/$start_time/end/$end_time/",
             text => { "bc_pid[Array]" => '//change_to/@pid' },
         ),
@@ -118,7 +120,7 @@ sub get_missing_bc {
     | p { map { O->new( "pid[Num]" => $_ ) } @$bc_pid }
     # or: onew_from_field { bc_pid => "pid[Num]" } # really?
     | oadd {
-        S->XPath(
+        S->XPath->match(
             url => "http:/dynabcte/idtype/id/$pid",
             text => { exists => "//type/[ text() = 'bc' ]}" },
         );
