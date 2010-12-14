@@ -1,0 +1,9 @@
+onew { comment_url => $_ }
+| oadd {
+    S->XPath->match(
+        url => $_->comment_url,
+        text => {
+            message => q| //div[ @class="usertext-body" ]/div[ @class="md" ] |,
+        }
+    )
+}
