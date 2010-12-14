@@ -15,7 +15,7 @@ use Data::Dumper;
 
 method get_response($class: $url) {
     require App::Pebble;
-
+warn "Getting ($url)\n";
     my $ua = LWP::UserAgent::WithCache->new();
     $ua->{cache} = App::Pebble->cache; # so sue me, provide a useful interface then
     my $res = $ua->get( $url ) or return undef;
