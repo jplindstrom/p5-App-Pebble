@@ -56,7 +56,7 @@ sub main {
 
     if( defined $web_cache ) {
         my $cache_dir = File::HomeDir->my_dist_data( 'App-Pebble-web', { create => 1 } );
-warn "CACHE DIR: $cache_dir\n";        
+warn "Cache dir: ($cache_dir)\n";
         my $cache = App::Pebble->cache( Cache::FileCache->new({ cache_root => $cache_dir }) );
         $web_cache eq "flush" and $cache->clear();
     }
