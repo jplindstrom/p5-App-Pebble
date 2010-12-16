@@ -212,6 +212,29 @@ sub odelete  (&) {
     };
 }
 
+# Example: ogroup_count { query => query_count }
+sub ogroup_count (&) {
+    my $subref = shift;
+    my ($by, $into) = $subref->();
+    my %by_object;
+    my %by_count;
+    return ppool(
+        sub {
+            my $by_key = $_->{ $by };
+            $by_object{ $by_key } ||= $_;
+            $by_count{ $by_key }++;
+            return ();
+        },
+        sub {
+            my @grouped = 
+                sort { $a->$into <=> $b->$into }
+                map { O->modify( -add => { $into => $by_count{ $_->$by } } ) }
+                values %by_object;
+            return @grouped;
+        }
+      );
+}
+
 =head1 AUTHOR
 
 Johan Lindstrom, C<< <johanl at cpan.org> >>
