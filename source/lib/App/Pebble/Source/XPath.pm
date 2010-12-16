@@ -42,7 +42,7 @@ method match($class: :$xml?, :$url?, :$file?, :$text?) {
         my @nodes = eval {
             map { $_->to_literal } $xpc->findnodes( $xpath )->get_nodelist;
         };
-        $@ and warn( "Invalid XPath ($xpath)\n" ), next;
+        $@ and die( "Invalid XPath ($xpath)\n" ), next;
 
         ###TODO: change this to obey type information to indicate
         ###scalar / list behaviour
