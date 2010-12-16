@@ -46,10 +46,13 @@ method match($class: :$xml?, :$url?, :$file?, :$text?) {
 
         ###TODO: change this to obey type information to indicate
         ###scalar / list behaviour
-        my $value = @nodes > 1
-            ? [ @nodes ]
-            : @nodes;
+        my $value = do {
+          if( @nodes == 0 )    { undef      }
+          elsif( @nodes == 1 ) { $nodes[0]  }
+          else                 { [ @nodes ] }
+        };
         $key_value{ $key } = $value;
+     
     }
 
     return %key_value;
