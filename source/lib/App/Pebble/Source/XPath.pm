@@ -68,7 +68,11 @@ method parse_xml($class: $xml, $content_type?) {
     };
     my $parse_method = $type_parser->{ $content_type } || "parse_html_string";
 
-    ###TODO: remove namespace?
+    # Remove the default namespace
+    # If this isn't done, it needs to a) be registered, and b)
+    # referenced in the XPath. That's accurate, but not very handy.
+    $xml =~ s/ xmlns="[^"]+"//sm;
+
     my $dom = eval {
         # Suppress warnings and STDERR output from LibXML
         local *STDERR = *STDOUT;
