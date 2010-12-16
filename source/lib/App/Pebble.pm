@@ -107,6 +107,7 @@ use MooseX::ClassAttribute;
 use MooseX::Method::Signatures;
 
 use IO::Pipeline;
+use List::MoreUtils qw/ each_arrayref /;
 
 use aliased "App::Pebble::Parse" => "P";
 use aliased "App::Pebble::Render" => "R";
@@ -209,6 +210,29 @@ sub odelete  (&) {
     return pmap {
         my @args = $subref->();
         O->modify( -delete => [ @args ] );
+    };
+}
+
+sub omultiply (&) {
+    my $subref = shift;
+    my $multiply_by = [ $subref->() ];
+    return pmap {
+        my $object = $_;
+
+        ###TODO: ensure the value is an arrayref, might be a scalar
+        my $by_values = each_arrayref( map { $object->$_ } @$multiply_by );
+        
+        my @sum;
+        while ( my @vars = $by_values->() ) {
+            my $new_object = O->clone( $object );
+            for my $attribute ( @$multiply_by ) {
+                $new_object->$attribute( shift( @vars ) );
+            }
+
+            push( @sum, $new_object );
+        }
+
+        return @sum;
     };
 }
 
