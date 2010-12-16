@@ -48,6 +48,7 @@ sub main {
     $parser and $parser_stage ||= "$parser->parser";
 
     my ($user_stage) = @ARGV;
+    $user_stage and $user_stage = join( "\n", grep { ! /^\s*#/  } split( /\n/, $user_stage ) );
     $user_stage ||= 'pmap { $_ }';
 
 
