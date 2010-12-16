@@ -8,6 +8,7 @@ use Getopt::Long;
 use Data::Dumper;
 use File::HomeDir;
 use Cache::FileCache;
+use Cache::NullCache;
 
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
@@ -24,7 +25,7 @@ sub main {
         "parser:s"       => \( my $parser ),
         "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
-        "web_cache:s"    => \( my $web_cache ),
+        "web_cache:s"    => \( my $web_cache = Cache::NullCache->new() ),
     );
 
     my $input_source = q{\*STDIN};
