@@ -1,9 +1,32 @@
-onew { comment_url => $_ }
+onew { url => $_ }
+| oreplace {
+    url => {
+        S->XPath->match(
+            url  => $_->url,
+            text => {
+                title => q| //div[ @class="detName" ]/a[ @class="detLink" ] |,
+                page_url   => q| //div[ @class="detName" ]/a[ @class="detLink" ]/@href |,
+            },
+        )
+    },
+}
+| omultiply { qw/ title page_url / }
+| pgrep { $_->title =~ /walking/i }
 | oadd {
     S->XPath->match(
-        url => $_->comment_url,
-        text => {
-            message => q| //div[ @class="usertext-body" ]/div[ @class="md" ] |,
-        }
-    )
+        url => "http://thepiratebay.org" . $_->page_url,
+        text=> {
+            file_count    => q| //dl[ @class="col1"]/dt[ . = "Files:"]/following-sibling::*[1] |,
+            size_text     => q| //dl[ @class="col1"]/dt[ . = "Size:"]/following-sibling::*[1] |,
+            seeder_count  => q| //dl[ @class="col2"]/dt[ . = "Seeders:"]/following-sibling::*[1] |,
+            leecher_count => q| //dl[ @class="col2"]/dt[ . = "Leechers:"]/following-sibling::*[1] |,
+            comment_count => q| //span[ @id="NumComments" ] |,
+        },
+),
 }
+| p { $_->size_text =~ /\((\d+)/ and $1; $_ }
+| oreplace {
+    size_text => { size_bytes => do { $_->size_text =~ /\((\d+)/ and $1 } },
+}
+
+| odelete { "page_url" }
