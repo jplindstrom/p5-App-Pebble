@@ -156,9 +156,10 @@ warn "((($pipeline_perl)))\n";
 
 }
 
-sub plimit ($) {
-    my ($limit) = @_;
-
+sub plimit (&) {
+    my ($limit_subref) = @_;
+    my ($limit) = $limit_subref->();
+    
     my $count = 0;
     return pgrep { $count++ < $limit; }
 }
