@@ -66,19 +66,36 @@
 ** Global cache manager, for e.g. caching http requests
 *** can be reset for all, or for a type e.g. Web
 ** Lexical vars for each attribute
+** Lexical for $_ and pad
+*** $o aliased to $_
+*** $c is a context object that lives next to the stream, useful to keep track of stuff
+** preverse
 ** psort
+*** regular $a $b
+** osort
+*** osort { "method_name" }
+*** osort { -num => "method_name" }
+*** osort { "method_name1, -num => "second_method", -num => "third_method" }
+** group by
+*** ogroup { -by => "q", -count => "count" }'
+*** ogroup_count { q => "q_count" }
 ** CLI
 *** Call with script file or source
 *** Call with parameters which are available inside
 **** S->CLI->param( "name" );
+** Custom application calls
+*** { S->Ion->search( -env="Live", q => $_->q ) }
 ** collect_pool
 *** pool, but collects all the items and pass the whole lot to a single post sub
 ** psort
 *** return new IO stream
 ** Nicer error reporting
+*** Missing |
 Not enough arguments for App::Pebble::plimit at (eval 221) line 4, near "plimit |"
 	...propagated at lib/App/Pebble.pm line 42.
-
+*** Referring to attribute taht doesn't exist
+Can't locate object method "episode" via package "Class::MOP::Class::__ANON__::SERIAL::20" at /home/lindsj05/Personal/Dev/CPAN/App-Pebble/source/lib/App/Pebble.pm line 223.
+   ...propagated at /home/lindsj05/Personal/Dev/CPAN/App-Pebble/source/lib/App/Pebble.pm line 155.
 ** p --cmd=df 'P->Graph->Basic->Bar({ x => "mounted_on", y => "capacity" });
 ** p -m --Match --has=abc,def,ghi or named captures
 ** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
