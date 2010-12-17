@@ -87,7 +87,7 @@ method parse_xml($class: $xml, $content_type?) {
 }
 
 method deduce_content_type($class: $xml) {
-    $xml =~ m| \s* ( (?i) <?xml ) \b |smx and return "application/xml";
+    $xml =~ m| \s* ( (?i) <\?xml ) \b |smx and return "application/xml";
     return "";
 }
 
