@@ -11,22 +11,38 @@ onew { url => $_ }
     },
 }
 | omultiply { qw/ title page_url / }
-| pgrep { $_->title =~ /walking/i }
+#| plimit { 5 }
+#| pgrep { $_->title =~ /walking/i }
+| oreplace { page_url => { html => S->Web->get( "http://thepiratebay.org" . $_->page_url ) } }
 | oadd {
     S->XPath->match(
-        url => "http://thepiratebay.org" . $_->page_url,
+        xml => $_->html,
         text=> {
             file_count    => q| //dl[ @class="col1"]/dt[ . = "Files:"]/following-sibling::*[1] |,
             size_text     => q| //dl[ @class="col1"]/dt[ . = "Size:"]/following-sibling::*[1] |,
             seeder_count  => q| //dl[ @class="col2"]/dt[ . = "Seeders:"]/following-sibling::*[1] |,
             leecher_count => q| //dl[ @class="col2"]/dt[ . = "Leechers:"]/following-sibling::*[1] |,
             comment_count => q| //span[ @id="NumComments" ] |,
+            imdb_url      => q| //a[ @title="IMDB" ]/@href |,
         },
-),
+    ),
 }
 | p { $_->size_text =~ /\((\d+)/ and $1; $_ }
 | oreplace {
     size_text => { size_bytes => do { $_->size_text =~ /\((\d+)/ and $1 } },
 }
-
-| odelete { "page_url" }
+| oadd { seeder_ratio => sprintf( "%.2f", ( $_->seeder_count || 0 ) / ( $_->leecher_count || 1 ) ) }
+| oadd {
+    imdb_rating => do {
+        my (undef, $rating) = $_->imdb_url
+        ? S->XPath->match(
+            url => $_->imdb_url,
+            text => {
+                rating => q| //span[ @class="rating-rating" ]/text() |,
+            },
+          )
+        : ( undef, "N/A" );
+        $rating;
+    },
+}
+| odelete { "html", "imdb_url" }
