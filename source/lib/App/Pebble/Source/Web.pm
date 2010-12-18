@@ -18,6 +18,11 @@ method get_response($class: $url) {
 warn "Getting ($url)\n";
     my $ua = LWP::UserAgent::WithCache->new();
     $ua->{cache} = App::Pebble->cache; # so sue me, provide a useful interface then
+
+    # Ignore the response "expires" header, always use cache if
+    # present
+    no warnings "once";
+    local *GLOBAL::time = sub { 0 };
     my $res = $ua->get( $url ) or return undef;
     return $res;
 }
