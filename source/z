@@ -11,7 +11,7 @@ onew { url => $_ }
     },
 }
 | omultiply { qw/ title page_url / }
-#| plimit { 5 }
+| plimit { 15 }
 #| pgrep { $_->title =~ /walking/i }
 | oreplace { page_url => { html => S->Web->get( "http://thepiratebay.org" . $_->page_url ) } }
 | oadd {
@@ -34,15 +34,18 @@ onew { url => $_ }
 | oadd { seeder_ratio => sprintf( "%.2f", ( $_->seeder_count || 0 ) / ( $_->leecher_count || 1 ) ) }
 | oadd {
     imdb_rating => do {
-        my (undef, $rating) = $_->imdb_url
-        ? S->XPath->match(
-            url => $_->imdb_url,
-            text => {
-                rating => q| //span[ @class="rating-rating" ]/text() |,
-            },
-          )
-        : ( undef, "N/A" );
+        my (undef, $rating) = ( ! $_->imdb_url )
+            ? ( undef, "N/A" )
+            : S->XPath->match(
+                url => $_->imdb_url,
+                text => {
+                    rating => q| //span[ @class="rating-rating" ]/text() |,
+                },
+            );
         $rating;
-    },
+     },
 }
+| pgrep { $_->imdb_rating eq "N/A" || $_->imdb_rating > 6 }
+| osort { "1-imdb_rating" }
+#| plimit { 10 }
 | odelete { "html", "imdb_url" }
