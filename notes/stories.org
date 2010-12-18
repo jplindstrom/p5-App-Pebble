@@ -51,6 +51,7 @@
 *** no
 *** 
 ** DONE plimit
+** TODO ppool signature can be &;&&
 ** differentiate between p and pmap
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
