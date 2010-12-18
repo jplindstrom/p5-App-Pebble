@@ -52,7 +52,7 @@
 *** 
 ** DONE plimit
 ** TODO ppool signature can be &;&&
-** TODO CLI
+** CLI
 *** DONE Call with script file or source
 *** Call with parameters which are available inside
 **** S->CLI->param( "name" );
@@ -65,6 +65,8 @@
 ** Unify the R->, S-> etc
 *** whether they're inside a p {} or not
 ** Unify Render / Renderer naming
+** use Devel::Eval
+*** http://search.cpan.org/~adamk/Devel-Eval-1.01/lib/Devel/Eval.pm
 ** Global cache manager, for e.g. caching http requests
 *** can be reset for all, or for a type e.g. Web
 ** Lexical vars for each attribute
