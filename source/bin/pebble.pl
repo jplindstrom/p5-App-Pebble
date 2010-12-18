@@ -9,6 +9,7 @@ use Data::Dumper;
 use File::HomeDir;
 use Cache::FileCache;
 use Cache::NullCache;
+use File::Slurp qw/ read_file /;
 
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
@@ -48,6 +49,7 @@ sub main {
     $parser and $parser_stage ||= "$parser->parser";
 
     my ($user_stage) = @ARGV;
+    -r $user_stage and $user_stage = read_file( $user_stage );
     $user_stage and $user_stage = join( "\n", grep { ! /^\s*#/  } split( /\n/, $user_stage ) );
     $user_stage ||= 'pmap { $_ }';
 
