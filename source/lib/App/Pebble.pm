@@ -264,7 +264,7 @@ sub osort (&) {
             "($reverse( \$a->$_ $comparator \$b->$_ ))"
         } @sort_by
     );
-    my $sort_sub = eval "sub { $sort_compare }";
+    my $sort_sub = eval "sub { no warnings; $sort_compare }";
 
     my @objects;
     return ppool(
