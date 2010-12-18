@@ -237,6 +237,23 @@ sub omultiply (&) {
     };
 }
 
+sub osort (&) {
+    my $subref = shift;
+    my @sort_by = $subref->();
+
+    my $sort_compare = join( " || ", grep { "( \$a->$_ cmp \$b->$_ )" } @sort_by );
+    my $sort_sub = eval "sub { $sort_compare }";
+
+    my @objects;
+    return ppool(
+        sub {
+            push @objects => $_;
+            return ();
+        },
+        sub { @objects = sort $sort_sub @objects },
+    );
+}
+
 # Example: ogroup_count { query => query_count }
 sub ogroup_count (&) {
     my $subref = shift;
