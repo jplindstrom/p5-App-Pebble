@@ -237,11 +237,33 @@ sub omultiply (&) {
     };
 }
 
+# leading 1 indicates numerical comparison
+# leading - indicates a reverse sort order
+# leading + indicates a normal sort order (default, but can be used for clarity)
+#
+# Examples:
+# osort { "name" }
+# osort {qw/ last_name first_name /}
+# osort { "-name" }
+# osort { "1size", "1-age_seconds" }
+# osort { "1+size", "1-age_seconds", "name" }
 sub osort (&) {
     my $subref = shift;
     my @sort_by = $subref->();
 
-    my $sort_compare = join( " || ", grep { "( \$a->$_ cmp \$b->$_ )" } @sort_by );
+    my $sort_compare = join(
+        "\n || \n",
+        map {
+            my $comparator = "cmp";
+            s/^\d// and $comparator = "<=>";
+
+            my $reverse = "";
+            s/^-// and $reverse = " -1 * ";
+            s/^+//; # Clean up
+            
+            "($reverse( \$a->$_ $comparator \$b->$_ ))"
+        } @sort_by
+    );
     my $sort_sub = eval "sub { $sort_compare }";
 
     my @objects;
