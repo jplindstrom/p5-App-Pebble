@@ -52,15 +52,16 @@
 *** 
 ** DONE plimit
 ** TODO ppool signature can be &;&&
+** TODO CLI
+*** DONE Call with script file or source
+*** Call with parameters which are available inside
+**** S->CLI->param( "name" );
 ** differentiate between p and pmap
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
 ** debug flag
-** Object creation, mutation
-*** sub O(%)
-**** O { "file[File]" => "/etc/passwd", url => $url }
-***** Create a metaclass with keys, object with values
-**** Transform
+** Move onew, etc into Pebble::Object someting
+*** Make it a plugin-like thing
 ** Unify the R->, S-> etc
 *** whether they're inside a p {} or not
 ** Unify Render / Renderer naming
@@ -80,10 +81,6 @@
 ** group by
 *** ogroup { -by => "q", -count => "count" }'
 *** ogroup_count { q => "q_count" }
-** CLI
-*** Call with script file or source
-*** Call with parameters which are available inside
-**** S->CLI->param( "name" );
 ** Custom application calls
 *** { S->Ion->search( -env="Live", q => $_->q ) }
 ** collect_pool
