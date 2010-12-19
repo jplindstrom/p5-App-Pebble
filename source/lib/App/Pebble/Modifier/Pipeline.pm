@@ -13,24 +13,28 @@ plumbing.
 
 package App::Pebble::Modifier::Pipeline;
 use Moose;
+extends "Exporter";
 use MooseX::Method::Signatures;
-use Sub::Exporter -setup => { exports => [ qw(
-  pmap
-  pgrep
-  ppool
-  pn
-  plimit
-) ] };
-    
+our @EXPORT = qw(
+    p
+    pmap
+    pgrep
+    ppool
+    pn
+    plimit
+);
+
 use IO::Pipeline;
 
-no warnings "once";
-*p = *pmap;
+{
+    no warnings "once";
+    *p = *pmap;
+}
 
 sub plimit (&) {
     my ($limit_subref) = @_;
     my ($limit) = $limit_subref->();
-    
+
     my $count = 0;
     return pgrep { $count++ < $limit; }
 }

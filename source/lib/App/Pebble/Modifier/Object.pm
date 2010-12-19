@@ -13,20 +13,26 @@ objects.
 
 package App::Pebble::Modifier::Object;
 use Moose;
-use MooseX::Method::Signatures;
-use Sub::Exporter -setup => { exports => [ 'onew', qw(
-  omodify
-  oadd
-  oreplace
-  okeep
-  odelete
-  omultiply
-  osort
-  ogroup
-) ] };
+extends "Exporter";
 
-use App::Pebble::Modifier::Pipeline;
+our @EXPORT = qw(
+    onew
+    omodify
+    oadd
+    oreplace
+    okeep
+    odelete
+    omultiply
+    osort
+    ogroup
+);
+
+use MooseX::Method::Signatures;
 use List::MoreUtils qw/ each_arrayref /;
+
+use aliased "Pebble::Object::Class" => "O";
+use App::Pebble::Modifier::Pipeline;
+
 
 # TODO? Refactor these, or keep inlined for clarity and perf?
 
@@ -45,6 +51,7 @@ sub omodify (&) {
         O->modify( %arg );
     };
 }
+
 sub oadd (&) {
     my $subref = shift;
     return pmap {
@@ -52,6 +59,7 @@ sub oadd (&) {
         O->modify( -add => { %arg } )
     };
 }
+
 sub oreplace (&) {
     my $subref = shift;
     return pmap {
@@ -59,6 +67,7 @@ sub oreplace (&) {
         O->modify( -replace => { %arg } );
     };
 }
+
 sub okeep (&) {
     my $subref = shift;
     return pmap {
@@ -66,6 +75,7 @@ sub okeep (&) {
         O->modify( -keep => [ @args ] );
     };
 }
+
 sub odelete (&) {
     my $subref = shift;
     return pmap {
@@ -82,7 +92,7 @@ sub omultiply (&) {
 
         ###TODO: ensure the value is an arrayref, might be a scalar
         my $by_values = each_arrayref( map { $object->$_ } @$multiply_by );
-        
+
         my @sum;
         while ( my @vars = $by_values->() ) {
             my $new_object = O->clone( $object );
@@ -120,7 +130,7 @@ sub osort (&) {
             my $reverse = "";
             s/^-// and $reverse = " -1 * ";
             s/^\+//; # Clean up
-            
+
             "($reverse( \$a->$_ $comparator \$b->$_ ))"
         } @sort_by
     );
@@ -150,7 +160,7 @@ sub ogroup_count (&) {
             return ();
         },
         sub {
-            my @grouped = 
+            my @grouped =
                 sort { $a->$into <=> $b->$into }
                 map { O->modify( -add => { $into => $by_count{ $_->$by } } ) }
                 values %by_object;
