@@ -4,6 +4,13 @@
 
 App::Pebble - Unix like streams, but with objects instead of lines of text
 
+=head1 DESCRIPTION
+
+The Unix idea of a stream of lines, on steroids.
+
+Note: This is alpha, pure R&D at this stage; just trying out a good
+way to do things.
+
 =head1 SYNOPSIS
 
 =head2 Work with lines of text
@@ -109,25 +116,18 @@ use MooseX::Method::Signatures;
 use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
 
-use aliased "App::Pebble::Parse" => "P";
-use aliased "App::Pebble::Render" => "R";
+use aliased "App::Pebble::Parse"    => "P";
+use aliased "App::Pebble::Render"   => "R";
 use aliased "Pebble::Object::Class" => "O";
-use aliased "App::Pebble::Source" => "S";
+use aliased "App::Pebble::Source"   => "S";
 
 #TODO: plugin system
 use App::Pebble::Command::df;
 use App::Pebble::Command::du;
 
+#TODO: plugin system
+use App::Pebble::Modifier::Pipeline;
 use App::Pebble::Modifier::Object;
-
-=head1 DESCRIPTION
-
-The Unix idea of a stream of lines, on steroids.
-
-Note: This is alpha, pure R&D at this stage; just trying out a good
-way to do things.
-
-=cut
 
 
 =head1 CLASS ATTRIBUTES

@@ -11,16 +11,10 @@ objects.
 
 =cut
 
-package App::Pebble;
+package App::Pebble::Modifier::Object;
 use Moose;
 use MooseX::Method::Signatures;
-use Sub::Exporter -setup => { exports => [ qw(
-  pmap
-  pgrep
-  ppool
-  pn
-  plimit
-  onew
+use Sub::Exporter -setup => { exports => [ 'onew', qw(
   omodify
   oadd
   oreplace
@@ -30,28 +24,13 @@ use Sub::Exporter -setup => { exports => [ qw(
   osort
   ogroup
 ) ] };
-    
-use IO::Pipeline;
+
+use App::Pebble::Modifier::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
-
-no warnings "once";
-*p = *pmap;
-
-sub plimit (&) {
-    my ($limit_subref) = @_;
-    my ($limit) = $limit_subref->();
-    
-    my $count = 0;
-    return pgrep { $count++ < $limit; }
-}
-
-sub pn () {
-    return pmap { "$_\n" };
-}
 
 # TODO? Refactor these, or keep inlined for clarity and perf?
 
-sub onew     (&) {
+sub onew (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
@@ -59,14 +38,14 @@ sub onew     (&) {
     };
 }
 
-sub omodify     (&) {
+sub omodify (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
         O->modify( %arg );
     };
 }
-sub oadd     (&) {
+sub oadd (&) {
     my $subref = shift;
     return pmap {
         my %arg  = $subref->();
@@ -80,14 +59,14 @@ sub oreplace (&) {
         O->modify( -replace => { %arg } );
     };
 }
-sub okeep    (&) {
+sub okeep (&) {
     my $subref = shift;
     return pmap {
         my @args  = $subref->();
         O->modify( -keep => [ @args ] );
     };
 }
-sub odelete  (&) {
+sub odelete (&) {
     my $subref = shift;
     return pmap {
         my @args = $subref->();
