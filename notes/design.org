@@ -1,6 +1,7 @@
 * Design
 ** Concepts
 *** Parser
+**** Parsers turn Data into Objects
 **** Parsers normally operate on a text stream
 ***** matching a line into attributes of a new or existing Object
 **** e.g.
@@ -57,6 +58,9 @@
 ****** into new or existing attributes of your Objects
 ***** Optimized for the common case, and brevity
 *** Renderer
+**** Renderers turn Objects into Data
+***** Usually transorming the Objects to lines in the stream
+***** But could also write data sideways into files, a db, etc.
 **** JSON
 **** XML
 **** table

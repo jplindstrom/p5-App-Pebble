@@ -1,5 +1,5 @@
 
-* DONE
+* STUFF DONE
 * IDEAS
 ** Parallel processing
 ** Input
@@ -12,10 +12,11 @@
 **** df
 **** /etc/passwd
 *** Web
-**** GET
-**** XPaths
+**** DONE GET
+**** DONE XPaths
 *** SQLite db
 *** SQL query
+*** Data source dictionary in config
 *** MySQL resultset output
 **** Parse
 ***** with ;
@@ -25,7 +26,6 @@
 *** E.g.
 **** S->Web->get($url)
 **** S->DBI->db( $connect )->select( $sql )
-**** 
 ** Render
 *** Pebble / Perl
 *** Table (like SQL query)
@@ -36,12 +36,13 @@
 **** Insert
 **** Update
 **** Upsert
+**** Use datatype to quote correctly
 *** xargs
-*** CSV
+*** DONE CSV
 *** SQLite db
-** Grep
-** Map
-** Exmaples
+** DONE Grep
+** DONE Map
+** Examples
 *** Get a list of URLs, and find the Director, insert it into the director table
 **** p -s --has=url urls.txt | p --grep '{ $url =~ /imdb.com/ }' | p html=Web-get(url) | p --with=html -parse=XPath --xpath=...
 **** p -s --has=url urls.txt | p --grep url=/imdb.com/ | p --map '{ Web->get($url)' --parse=XPath --xpath=director='//
@@ -51,24 +52,26 @@
 *** no
 *** 
 ** DONE plimit
+** DONE Move onew, etc into Pebble::Object someting
+*** Make it a plugin-like thing
+** DONE Global cache manager, for e.g. caching http requests
+*** can be reset for all, or for a type e.g. Web
 ** TODO ppool signature can be &;&&
 ** CLI
 *** DONE Call with script file or source
+*** allow it to be it's own script with .pbl extension
 *** Call with parameters which are available inside
 **** S->CLI->param( "name" );
 ** differentiate between p and pmap
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
 ** debug flag
-** Move onew, etc into Pebble::Object someting
-*** Make it a plugin-like thing
+** Log stuff
 ** Unify the R->, S-> etc
 *** whether they're inside a p {} or not
 ** Unify Render / Renderer naming
 ** use Devel::Eval
 *** http://search.cpan.org/~adamk/Devel-Eval-1.01/lib/Devel/Eval.pm
-** Global cache manager, for e.g. caching http requests
-*** can be reset for all, or for a type e.g. Web
 ** Lexical vars for each attribute
 ** Lexical for $_ and pad
 *** $o aliased to $_
@@ -76,19 +79,21 @@
 ** preverse
 ** psort
 *** regular $a $b
-** osort
-*** osort { "method_name" }
-*** osort { -num => "method_name" }
-*** osort { "method_name1, -num => "second_method", -num => "third_method" }
+** DONE osort
+*** osort { "1-method_name" }
 ** group by
 *** ogroup { -by => "q", -count => "count" }'
+**** by scalar or array ref
+**** use statistics module
+**** Collect into arrayref, like GROUP_CONCAT, except not concat
 *** ogroup_count { q => "q_count" }
+**** Common special case
 ** Custom application calls
 *** { S->Ion->search( -env="Live", q => $_->q ) }
+** Load extra plugins from load path PEBBLE_LIB, or PERL5LIB or -I
 ** collect_pool
 *** pool, but collects all the items and pass the whole lot to a single post sub
-** psort
-*** return new IO stream
+*** In IO::Pipeline
 ** Nicer error reporting
 *** Missing |
 Not enough arguments for App::Pebble::plimit at (eval 221) line 4, near "plimit |"
@@ -96,11 +101,10 @@ Not enough arguments for App::Pebble::plimit at (eval 221) line 4, near "plimit 
 *** Referring to attribute taht doesn't exist
 Can't locate object method "episode" via package "Class::MOP::Class::__ANON__::SERIAL::20" at /home/lindsj05/Personal/Dev/CPAN/App-Pebble/source/lib/App/Pebble.pm line 223.
    ...propagated at /home/lindsj05/Personal/Dev/CPAN/App-Pebble/source/lib/App/Pebble.pm line 155.
-** p --cmd=df 'P->Graph->Basic->Bar({ x => "mounted_on", y => "capacity" });
-** p -m --Match --has=abc,def,ghi or named captures
+** p --cmd=df 'R->Graph->basic( x => "mounted_on", y => "capacity" );
+** p -m --match --has=abc,def,ghi or named captures
+*** Not really needed, use P->match( regex => qr//, has => \qw( abc def ) )
 ** p -s --split '\t' --has=abc,def,ghi or ghi+ (means capture all the rest in there)
-** p -p --print (this is also the default action altogether)
-*** Default format
 ** p -p 'hello %s $name %20s, your birthday is {$birthdate->ymd}\n' title,lastname
 ** p -j --json
 ** p --in=CSV
