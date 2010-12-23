@@ -1,0 +1,8 @@
+P->split({ has => { cpu_user => 7, cpu_sys => 8, cpu_id => 9 } })
+|  pgrep { defined $_->cpu_user && $_->cpu_user > 0 }
+| plimit { 30 }
+| R->Graph->Basic({
+    y => [ "cpu_user", "cpu_sys"],
+    type => "Line",
+    width => 600,
+})
