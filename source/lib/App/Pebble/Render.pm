@@ -11,6 +11,7 @@ use MooseX::Method::Signatures;
 
 use App::Pebble::Render::CSV;
 use App::Pebble::Render::table;
+use App::Pebble::Render::Graph;
 
 sub needs_pool { 0 }
 
@@ -25,5 +26,9 @@ sub table {
     App::Pebble::Render::table->render( @_ );
 }
 
+sub Graph {
+    my $class = shift;
+    "App::Pebble::Render::Graph";
+}
 
 1;
