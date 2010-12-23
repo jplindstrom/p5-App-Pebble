@@ -27,6 +27,7 @@ sub main {
         "out:s"          => \( my $output_renderer ),
         "cmd:s"          => \( my $cmd ),
         "web_cache:s"    => \( my $web_cache = Cache::NullCache->new() ),
+        "script"         => \( my $script ),
     );
 
     my $input_source = q{\*STDIN};
@@ -53,6 +54,12 @@ sub main {
     $user_stage and $user_stage = join( "\n", grep { ! /^\s*#/  } split( /\n/, $user_stage ) );
     $user_stage ||= 'pmap { $_ }';
 
+    if( $script ) {
+        my $script_source = $user_stage;
+        $script_source =~ s/ ([}\)]) [ ]* \| [ ]* (\w+) /$1\n| $2/smgx;
+        print "$script_source\n";
+        exit(0);
+    }
 
     my $pebble = App::Pebble->new;
 
