@@ -11,7 +11,7 @@ onew { url => $_ }
     },
 }
 | omultiply { qw/ title page_url / }
-| plimit { 15 }
+| plimit { 5 }
 #| pgrep { $_->title =~ /walking/i }
 | oreplace { page_url => { html => S->Web->get( "http://thepiratebay.org" . $_->page_url ) } }
 | oadd {
