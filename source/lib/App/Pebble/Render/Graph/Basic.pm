@@ -20,6 +20,7 @@ use IO::Pipeline;
 use Chart::Clicker;
 use Chart::Clicker::Data::DataSet;
 use Chart::Clicker::Data::Series;
+use Chart::Clicker::Axis::DateTime;
 # use Chart::Clicker::Context;
 # use Chart::Clicker::Data::Marker;
 # use Geometry::Primitive::Rectangle;
@@ -50,12 +51,21 @@ method render($class: $args?) {
     my $key_values = { };
     my $count = 0;
 
+    my $keys_are_all_datetimes = 1;
+
     return ppool(
       sub {
           $count++;
 
           no warnings;
           my $x_value = $x ? $_->$x : $count;
+
+          if( blessed( $x_value ) && $x_value->isa( "DateTime" ) ) {
+              $x_value = $x_value->epoch;
+          } else {
+              $keys_are_all_datetimes = 0;
+          }
+              
           if( $class->is_numeric( $x_value ) ) {
               for my $cur_y ( @$y ) {
                   my $y_value = $_->$cur_y;
@@ -69,7 +79,15 @@ method render($class: $args?) {
           ();
       },
       sub {
-          
+          if( $keys_are_all_datetimes ) {
+              my $ctx = $cc->get_context('default');
+              $ctx->domain_axis(
+                  Chart::Clicker::Axis::DateTime->new(
+                      position    => 'bottom',
+                      orientation => 'horizontal'
+                  ),
+              );
+          }
           
           $cc->add_to_datasets(
               Chart::Clicker::Data::DataSet->new(
