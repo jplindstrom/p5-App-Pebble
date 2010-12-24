@@ -25,7 +25,8 @@ our @EXPORT = qw(
     omultiply
     ogrep
     osort
-    ogroup
+    ogroup_count
+    o
 );
 
 use MooseX::Method::Signatures;
@@ -34,6 +35,14 @@ use List::MoreUtils qw/ each_arrayref /;
 use aliased "Pebble::Object::Class" => "O";
 use App::Pebble::Modifier::Pipeline;
 
+
+sub o (&) {
+    my $subref = shift;
+    return pmap {
+        $subref->();
+        $_;
+    };
+}
 
 # TODO? Refactor these, or keep inlined for clarity and perf?
 
