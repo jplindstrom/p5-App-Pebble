@@ -11,6 +11,8 @@
 **** du
 **** df
 **** /etc/passwd
+**** git
+***** log
 *** Web
 **** DONE GET
 **** DONE XPaths
@@ -27,6 +29,8 @@
 **** S->Web->get($url)
 **** S->DBI->db( $connect )->select( $sql )
 ** Render
+*** DONE JSON
+**** default
 *** Pebble / Perl
 *** Table (like SQL query)
 *** HTML table
