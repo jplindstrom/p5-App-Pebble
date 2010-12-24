@@ -49,9 +49,23 @@ sub main {
     my $parser_stage;
     $parser and $parser_stage ||= "$parser->parser";
 
-    my ($user_stage) = @ARGV;
-    -r $user_stage and $user_stage = read_file( $user_stage );
-    $user_stage and $user_stage = join( "\n", grep { ! /^\s*#/  } split( /\n/, $user_stage ) );
+    my (@user_stages) = @ARGV;
+    my $user_stage = join(
+        "\n| ",
+        map {
+            my $user_stage = $_;
+
+            # If file exists, load it
+            -r $user_stage and $user_stage = read_file( $user_stage );
+
+            # Remove comments
+            $user_stage and $user_stage = join(
+                "\n",
+                grep { ! /^\s*#/  } split( /\n/, $user_stage )
+            );
+        }
+        @user_stages
+    );
     $user_stage ||= 'pmap { $_ }';
 
     if( $script ) {
