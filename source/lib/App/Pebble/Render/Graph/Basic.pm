@@ -15,6 +15,7 @@ extends "App::Pebble::Render";
 
 use MooseX::Method::Signatures;
 
+use Data::Dumper;
 use IO::Pipeline;
 use Chart::Clicker;
 use Chart::Clicker::Data::DataSet;
@@ -68,7 +69,8 @@ method render($class: $args?) {
           ();
       },
       sub {
-#warn Dumper([ $key_values ]); use Data::Dumper;
+          
+          
           $cc->add_to_datasets(
               Chart::Clicker::Data::DataSet->new(
                   series => [
