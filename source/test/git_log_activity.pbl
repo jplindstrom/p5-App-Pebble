@@ -7,4 +7,4 @@ P->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
     x => "date",
     y => "commit_count",
 })
-
+# | R->table
