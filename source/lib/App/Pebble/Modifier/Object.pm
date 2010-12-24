@@ -23,6 +23,7 @@ our @EXPORT = qw(
     okeep
     odelete
     omultiply
+    ogrep
     osort
     ogroup
 );
@@ -144,6 +145,38 @@ sub osort (&) {
         },
         sub { @objects = sort $sort_sub @objects },
     );
+}
+
+sub ogrep (&) {
+    my $subref = shift;
+    my %field_condition = $subref->();
+
+    my $condition_sub = {
+        numerical => sub { _is_numerical( shift ) },
+        defined   => sub { defined( shift ) },
+        true      => sub { !! shift },
+    };
+
+    return pgrep {
+        for my $field ( keys %field_condition ) {
+            my $condition = $field_condition{ $field };
+            my $sub = $condition_sub->{ $condition }
+                or die( "Unknown condition ($condition) in ogrep():\n"
+                      . "Allowed conditions are: "
+                      . join( ", ", map { "'$_'" } keys %$condition_sub )
+                      . "\n" );
+            $sub->( $_->$field ) or return 0;
+        }
+
+        return 1;
+    };
+}
+
+# TOOD: Find non-naive solution
+sub _is_numerical {
+    my ($value) = @_;
+    defined $value or return 0;
+    return $value =~ /^-?[\d.]+$/;    
 }
 
 # Example: ogroup_count { query => query_count }
