@@ -1,7 +1,16 @@
 P->split({ has => { cpu_user => 7, cpu_sys => 8, cpu_idle => 9 } })
 | ogrep { cpu_user => "numerical", cpu_sys => "numerical" }
+| oadd { time => do {
+    use DateTime;
+    our $last;
+    $last ||= DateTime->now;
+    $last = $last->clone->add( seconds => 1 );
+    $last;
+} }
+| p { $_->time( $_->time->epoch ); $_ }
 | plimit { 40 }
 | R->Graph->Basic({
+    x => "time",
     y => [ "cpu_user", "cpu_sys", "cpu_idle"],
     type => "Line",
     width => 600,
