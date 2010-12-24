@@ -66,7 +66,8 @@ method render($class: $args?) {
           } else {
               $keys_are_all_datetimes = 0;
           }
-              
+
+          #TODO: this is-it-numerical should be atomic across the Object
           if( $class->is_numeric( $x_value ) ) {
               for my $cur_y ( @$y ) {
                   my $y_value = $_->$cur_y;
