@@ -56,7 +56,12 @@ sub main {
             my $user_stage = $_;
 
             # If file exists, load it
-            -r $user_stage and $user_stage = read_file( $user_stage );
+            if( -r $user_stage ) {
+                $user_stage = read_file( $user_stage );
+            }
+            else {
+                $user_stage =~ /[{(]/ or die( "This ($user_stage) isn't a file, and doesn't look like Pebble code.\n" );
+            }
 
             # Remove comments
             $user_stage and $user_stage = join(
