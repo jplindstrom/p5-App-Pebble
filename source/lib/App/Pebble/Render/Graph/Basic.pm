@@ -45,7 +45,8 @@ method render($class: $args?) {
     my $chart_type = "Chart::Clicker::Renderer::$type";
     eval "use $chart_type";
     $@ and die( "Could not use the Chart::Basic 'type' ($type)\n$@" );
-    $cc->get_context('default')->renderer( $chart_type->new( opacity => .8 ) );
+    my $ctx = $cc->get_context('default');
+    $ctx->renderer( $chart_type->new( opacity => .8 ) );
 
     my $keys = [ ];
     my $key_values = { };
@@ -80,11 +81,11 @@ method render($class: $args?) {
       },
       sub {
           if( $keys_are_all_datetimes ) {
-              my $ctx = $cc->get_context('default');
               $ctx->domain_axis(
                   Chart::Clicker::Axis::DateTime->new(
-                      position    => 'bottom',
-                      orientation => 'horizontal'
+                      position    => "bottom",
+                      orientation => "horizontal",
+                      staggered   => 1,
                   ),
               );
           }
@@ -99,7 +100,7 @@ method render($class: $args?) {
                               values => $key_values->{ $_ }->{values},
                           ),
                       }
-                      keys %$key_values
+                      @$y
                   ],
               ),
           );
