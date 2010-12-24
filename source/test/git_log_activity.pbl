@@ -1,0 +1,9 @@
+P->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => [ "date" ] )
+| ogroup_count { date => "commit_count" }
+| osort { "date" }
+| o { $_->date( S->DateTime->parse( $_->date ) ) }
+| R->Graph->Basic({
+    x => "date",
+    y => "commit_count",
+})
+
