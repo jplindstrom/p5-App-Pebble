@@ -23,21 +23,46 @@ method _values_to_fields($class: $has, $values) {
     return $arg_value;
 }
 
+method _index_values_to_fields($class: $has_index, $values) {
+    my $arg_value;
+    for my $field ( keys %$has_index ) {
+        my $index = $has_index->{ $field };
+        $arg_value->{ $field } = $values->[ $index ];
+    }
+
+    return $arg_value;
+}
+
+#TODO: don't use a hashref for the args
+
 #TODO: shoud really be in Parse::Regex or something like that, with
 #these methods exposed in this, so R->xxx works.
 method split($class: $args) {
     my $split = $args->{split} || qr/\s+/; 
     my $has   = $args->{has}   || [];
+
+    my $has_index;
+    if( ref $has eq "HASH" ) {
+        $has_index = $has;
+        $has = [ sort keys %$has_index ];
+    }
     (ref $has eq "ARRAY") or $has = [ $has ];  ###TODO: refactor
 
     my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
-    return pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
+    return $has_index
+      ? pmap { $meta_class->new_object( $class->_split_line_index( $split, $has_index, $_ ) ) }
+      : pmap { $meta_class->new_object( $class->_split_line( $split, $has, $_ ) ) };
 }
 
 method _split_line($class: $split, $has, $line) {
     my @values = split( $split, $line );
     return $class->_values_to_fields( $has, \@values );
+}
+
+method _split_line_index($class: $split, $has_index, $line) {
+    my @values = split( $split, $line );
+    return $class->_index_values_to_fields( $has_index, \@values );
 }
 
 method match($class: :$regex, :$has?) {
