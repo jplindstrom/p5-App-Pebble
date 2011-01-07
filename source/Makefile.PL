@@ -7,7 +7,7 @@ license  'perl';
 
 build_requires 'Test::More';
 
-requires 'File::HomeDir" => 0.93;
+requires 'File::HomeDir' => 0.93;
 
 auto_install;
 
