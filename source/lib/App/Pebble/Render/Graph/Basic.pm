@@ -36,6 +36,7 @@ method render($class: $args?) {
     my $x = $args->{x};
     my $y = $args->{y} or die( "Graph::Basic renderer missing 'y' parameter\n" );
     ref( $y ) ne "ARRAY" and $y = [ $y ];
+    my $y_min = $args->{y_min};
     my $type = $args->{type} || "Bar";
 
     my $cc = Chart::Clicker->new( width => $width, height => $height );
@@ -89,6 +90,10 @@ method render($class: $args?) {
                       staggered   => 1,
                   ),
               );
+          }
+
+          if( defined $y_min ) {
+            $ctx->range_axis->range->lower( $y_min );
           }
           
           $cc->add_to_datasets(

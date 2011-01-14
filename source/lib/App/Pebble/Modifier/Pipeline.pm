@@ -20,8 +20,9 @@ our @EXPORT = qw(
     pmap
     pgrep
     ppool
-    pn
     plimit
+    pevery
+    pn
 );
 
 use IO::Pipeline;
@@ -37,6 +38,14 @@ sub plimit (&) {
 
     my $count = 0;
     return pgrep { $count++ < $limit; }
+}
+
+sub pevery (&) {
+    my ($limit_subref) = @_;
+    my ($every) = $limit_subref->() || 10;
+
+    my $count = 0;
+    return pgrep { ! ( $count++ % $every ) }
 }
 
 sub pn () {
