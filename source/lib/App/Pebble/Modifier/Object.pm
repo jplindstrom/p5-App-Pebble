@@ -26,11 +26,13 @@ our @EXPORT = qw(
     ogrep
     osort
     ogroup_count
+    ogroup
     o
 );
 
 use MooseX::Method::Signatures;
-use List::MoreUtils qw/ each_arrayref /;
+use List::MoreUtils qw/ each_arrayref uniq /;
+use Statistics::Descriptive;
 
 use aliased "Pebble::Object::Class" => "O";
 use App::Pebble::Modifier::Pipeline;
@@ -38,9 +40,10 @@ use App::Pebble::Modifier::Pipeline;
 
 sub o (&) {
     my $subref = shift;
+    my $previous_object;
     return pmap {
-        $subref->();
-        $_;
+        $subref->($previous_object);
+        $previous_object = $_;
     };
 }
 
@@ -206,6 +209,64 @@ sub ogroup_count (&) {
                 sort { $a->$into <=> $b->$into }
                 map { O->modify( -add => { $into => $by_count{ $_->$by } } ) }
                 values %by_object;
+            return @grouped;
+        }
+      );
+}
+
+# Example: ogroup { query => { $attribute => "$grouped_attribute->$group_function" } }
+# Example: ogroup { query => { mean_duration => { duration => "mean" }, count => { query => "count" } }
+sub ogroup (&) {
+    my $subref = shift;
+    my ($by, $into_attribute_grouped_attribute_function) = $subref->();
+
+    my @grouped_attributes =
+        sort uniq(
+          map { keys %$_ }
+          values %$into_attribute_grouped_attribute_function,
+        );
+    ###TODO: error checking that these exist
+    ###TODO: error checking that the grouping functions exist
+
+    my @into_attributes = sort uniq( keys %$into_attribute_grouped_attribute_function );
+    ###TODO: error checking that these exist
+
+    my %by_object;
+    my $by_value_statistics = {};
+    return ppool(
+        sub {
+            my $by_value = $_->{ $by };
+            $by_object{ $by_value } ||= $_;
+
+            for my $grouped_attribute ( @grouped_attributes ) {
+                my $statistics = $by_value_statistics->{ $by_value }->{ $grouped_attribute }
+                    ||= Statistics::Descriptive::Full->new;
+                my $value = $_->{ $grouped_attribute };
+                my $numeric_value = $value; ### undef?
+                $numeric_value =~ /^-?[\d.]+$/ or $numeric_value = 0;
+                $statistics->add_data( $numeric_value );
+            }
+            return ();
+        },
+        sub {
+            my @grouped =
+#               sort { $a->$into <=> $b->$into }
+                map {
+                    my $o = $_;
+                    my $by_value = $o->{ $by };
+
+                    my $new_attribute_value = {};
+                    for my $into_attribute ( @into_attributes ) {
+                        for my $grouped_attribute ( keys %{ $into_attribute_grouped_attribute_function->{ $into_attribute } } ) {
+                            my $function = $into_attribute_grouped_attribute_function->{ $into_attribute }->{ $grouped_attribute };
+                            my $statistics = $by_value_statistics->{ $by_value }->{ $grouped_attribute };
+                            $new_attribute_value->{ $into_attribute } = $statistics->$function; ###TODO: validate $function
+                        }
+                    }
+
+                    O->modify( -add => $new_attribute_value );
+                }
+              values %by_object;
             return @grouped;
         }
       );
