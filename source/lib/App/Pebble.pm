@@ -148,8 +148,8 @@ class_has cache => ( is => "rw" );
 method pipeline( $stages, $input_source, $input_source_fh ) {
     @$stages = grep { $_ } @$stages;
     my $pipeline_perl = join( " |\n", @$stages );
-warn "((($pipeline_perl)))\n";
 
+warn "((($pipeline_perl)))\n";
     eval $pipeline_perl;
     $@ and die;
 
