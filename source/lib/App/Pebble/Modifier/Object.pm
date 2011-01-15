@@ -27,6 +27,7 @@ our @EXPORT = qw(
     osort
     ogroup_count
     ogroup
+    otracer_bullet
     o
 );
 
@@ -270,6 +271,17 @@ sub ogroup (&) {
             return @grouped;
         }
       );
+}
+
+sub otracer_bullet (&) {
+    my $subref = shift;
+    my $message = $subref->();
+    my $count = 0;
+    return  o {
+        $count++;
+        ###TODO: log, or debug level
+        warn( "$message - $count\n" );
+    };
 }
 
 1;
