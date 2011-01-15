@@ -71,6 +71,13 @@
 *** DONE Nope, instead use o { } to always return object
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
+** Try out another method thingy
+*** Bench
+**** time cat temp/kernel.log | perl bin/pebble.pl test/kernel_log.pbl
+*** use MooseX::Method::Signatures;
+**** 9s
+*** Method::Signatures
+**** 
 ** debug flag
 ** Log stuff
 ** Unify the R->, S-> etc
