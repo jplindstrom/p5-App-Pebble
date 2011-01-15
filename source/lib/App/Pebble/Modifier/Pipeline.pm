@@ -14,7 +14,7 @@ plumbing.
 package App::Pebble::Modifier::Pipeline;
 use Moose;
 extends "Exporter";
-use MooseX::Method::Signatures;
+use Method::Signatures;
 our @EXPORT = qw(
     p
     pmap

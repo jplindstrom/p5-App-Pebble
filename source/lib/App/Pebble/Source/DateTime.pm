@@ -8,7 +8,7 @@ into DateTime objects.
 
 package App::Pebble::Source::DateTime;
 use Moose;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use DateTimeX::Easy;
 

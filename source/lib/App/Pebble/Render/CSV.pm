@@ -9,7 +9,7 @@ package App::Pebble::Render::CSV;
 use Moose;
 extends "App::Pebble::Render";
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use IO::Pipeline;
 use Text::CSV_XS;

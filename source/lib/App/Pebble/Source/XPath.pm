@@ -7,7 +7,7 @@ App::Pebble::Source::XPath - XPath source, e.g. get + xpath matches
 
 package App::Pebble::Source::XPath;
 use Moose;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use File::Slurp qw/ read_file /;
 use XML::LibXML;

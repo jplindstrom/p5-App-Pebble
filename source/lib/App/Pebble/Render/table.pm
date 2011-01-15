@@ -9,7 +9,7 @@ package App::Pebble::Render::table;
 use Moose;
 extends "App::Pebble::Render";
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use Data::Format::Pretty::Console qw(format_pretty);
 use IO::Pipeline;

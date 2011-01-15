@@ -8,7 +8,7 @@ App::Pebble::Source::Web - Web source, e.g. HTTP get
 package App::Pebble::Source::Web;
 use Moose;
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use LWP::UserAgent::WithCache;
 use Data::Dumper;

@@ -7,7 +7,7 @@ App::Pebble::Source - Accessor class for Pebble Sources.
 
 package App::Pebble::Source;
 use Moose;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 ###TODO: plugin system
 use App::Pebble::Source::Web;

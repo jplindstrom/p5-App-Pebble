@@ -9,7 +9,7 @@ package App::Pebble::Command::du;
 use Moose;
 extends "App::Pebble::Command";
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use App::Pebble::Parse;
 
