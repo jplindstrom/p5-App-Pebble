@@ -115,6 +115,13 @@ use MooseX::Method::Signatures;
 
 use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
+use List::Util qw(first max maxstr min minstr reduce shuffle sum);
+
+# To avoid confusing NYTProf that aliased takes time itself
+use App::Pebble::Parse;
+use App::Pebble::Render;
+use Pebble::Object::Class;
+use App::Pebble::Source;
 
 use aliased "App::Pebble::Parse"    => "P";
 use aliased "App::Pebble::Render"   => "R";
