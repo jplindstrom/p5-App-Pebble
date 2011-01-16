@@ -82,6 +82,10 @@
 **** 4s
 ** TODO Plugins
 *** Load plugins on demand
+**** Class::Autouse
+**** Also put an alias in place to allow for a shorter access path
+***** Required sub autouse to return the list of autoused package names
+***** or call private method
 ** Replace Graph with Chart
 ** debug flag
 ** Log stuff
