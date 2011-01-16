@@ -3,16 +3,19 @@ onew {
     S->XPath->match(
         url => "http://www.imdb.com/name/$_/",
         text => {
+            name => q| //meta[ @name="title" ]/@content |,
             year => q| //div[ @class="filmo-row odd" or @class="filmo-row even" ]//span[ @class="year_column"] |,
         },
     ),
 }
+| o { $_->name( $_->name =~ /(.+?) - IMDb/ && $1 ) }
 | omultiply { "year" }
 | ogrep { year => "numerical" }
 | ogroup_count { year => "movies" }
 | osort { "1+year" }
 | o { $_->year( S->DateTime->parse( $_->year ) ) }
 | R->Graph->Basic({
-    x => "year",
-    y => "movies",
+    x    => "year",
+    y    => "movies",
+    type => "Line",
 })
