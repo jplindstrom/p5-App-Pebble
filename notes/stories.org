@@ -77,7 +77,9 @@
 *** use MooseX::Method::Signatures;
 **** 9s
 *** Method::Signatures
-**** 
+**** 6s
+*** Method::Signatures in Pebble::Object
+**** 4s
 ** debug flag
 ** Log stuff
 ** Unify the R->, S-> etc
