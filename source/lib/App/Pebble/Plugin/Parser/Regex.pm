@@ -1,11 +1,12 @@
 
 =head1 NAME
 
-App::Pebble::Parse - Base class for Pebble parsers
+App::Pebble::Parser::Regex - Parse a line into objcts using a regex
+match or split.
 
 =cut
 
-package App::Pebble::Parse;
+package App::Pebble::Plugin::Parser::Regex;
 use Moose;
 use Method::Signatures;
 
@@ -33,8 +34,6 @@ method _index_values_to_fields($class: $has_index, $values) {
     return $arg_value;
 }
 
-#TODO: shoud really be in Parse::Regex or something like that, with
-#these methods exposed in this, so R->xxx works.
 method split($class: :$split = qr/\s+/, :$has = []) {
     my $has_index;
     if( ref $has eq "HASH" ) {
