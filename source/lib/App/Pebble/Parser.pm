@@ -18,17 +18,22 @@ use Method::Signatures;
 use Exporter 'import';
 use Class::Autouse;
 
-###TODO: load plugins, alias them
-BEGIN {
-    my $package_prefix = "App::Pebble::Plugin::Parser";
+sub package_prefix       { "App::Pebble::Plugin::Parser" }
+sub package_abbreviation { "P" }
+
+method load_plugins($class:) {
+    my $package_prefix       = $class->package_prefix;
+    my $package_abbreviation = $class->package_abbreviation;
+
+    # Yeah, I know. Need autouse_recursive to return the loaded
+    # packages.
     Class::Autouse->autouse_recursive( $package_prefix );
     my %short_long = map {
         my $short = $_;
-        $short =~ s/^$package_prefix/P/;
+        $short =~ s/^$package_prefix/$package_abbreviation/;
         
         $short => $_;
-    }
-    Class::Autouse::_child_classes( $package_prefix );
+    } Class::Autouse::_child_classes( $package_prefix );
 
     for my $short ( keys %short_long ) {
         my $long = $short_long{ $short };
@@ -38,5 +43,7 @@ BEGIN {
 
     our @EXPORT = ( keys %short_long );
 }
+
+BEGIN { __PACKAGE__->load_plugins() }
 
 1;
