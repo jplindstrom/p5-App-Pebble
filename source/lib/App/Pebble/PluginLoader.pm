@@ -19,7 +19,7 @@ method load_plugins($class:) {
     my $package_abbreviation = $class->package_abbreviation;
 
     # Yeah, I know. Need autouse_recursive to return the loaded
-    # packages.
+    # packages instead of calling private sub.
     Class::Autouse->autouse_recursive( $package_prefix );
     my %short_long = map {
         my $short = $_;
