@@ -1,12 +1,12 @@
 
 =head1 NAME
 
-App::Pebble::Source::DateTime - Date/time source, i.e. parsing of strings
-into DateTime objects.
+App::Pebble::Plugin::Source::DateTime - Date/time source, i.e. parsing
+of strings into DateTime objects.
 
 =cut
 
-package App::Pebble::Source::DateTime;
+package App::Pebble::Plugin::Source::DateTime;
 use Moose;
 use Method::Signatures;
 

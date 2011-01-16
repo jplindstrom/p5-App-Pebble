@@ -1,11 +1,11 @@
 
 =head1 NAME
 
-App::Pebble::Source::XPath - XPath source, e.g. get + xpath matches
+App::Pebble::Plugin::Source::XPath - XPath source, e.g. get + xpath matches
 
 =cut
 
-package App::Pebble::Source::XPath;
+package App::Pebble::Plugin::Source::XPath;
 use Moose;
 use Method::Signatures;
 
@@ -13,7 +13,7 @@ use File::Slurp qw/ read_file /;
 use XML::LibXML;
 use XML::LibXML::XPathContext;
 
-use App::Pebble::Source::Web;
+use App::Pebble::Plugin::Source::Web;
 use Data::Dumper;
 
 method match($class: :$xml?, :$url?, :$file?, :$text?) {
