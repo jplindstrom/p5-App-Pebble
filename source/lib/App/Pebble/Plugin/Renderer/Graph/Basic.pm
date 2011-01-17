@@ -9,9 +9,8 @@ renderer with a more flexible API.
 
 =cut
 
-package App::Pebble::Plugin::Render::Graph::Basic;
+package App::Pebble::Plugin::Renderer::Graph::Basic;
 use Moose;
-extends "App::Pebble::Render";
 
 use Method::Signatures;
 

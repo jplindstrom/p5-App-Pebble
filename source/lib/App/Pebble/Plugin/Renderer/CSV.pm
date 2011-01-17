@@ -5,9 +5,8 @@ App::Pebble::Plugin::Render::CSV - Render CSV output
 
 =cut
 
-package App::Pebble::Plugin::Render::CSV;
+package App::Pebble::Plugin::Renderer::CSV;
 use Moose;
-extends "App::Pebble::Render";
 
 use Method::Signatures;
 
