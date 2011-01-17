@@ -1,7 +1,7 @@
 onew { url => $_ }
 | oreplace {
     url => {
-        S->XPath->match(
+        S::XPath->match(
             url  => $_->url,
             text => {
                 title => q| //div[ @class="detName" ]/a[ @class="detLink" ] |,
@@ -13,9 +13,9 @@ onew { url => $_ }
 | omultiply { qw/ title page_url / }
 | plimit { 5 }
 #| pgrep { $_->title =~ /walking/i }
-| oreplace { page_url => { html => S->Web->get( "http://thepiratebay.org" . $_->page_url ) } }
+| oreplace { page_url => { html => S::Web->get( "http://thepiratebay.org" . $_->page_url ) } }
 | oadd {
-    S->XPath->match(
+    S::XPath->match(
         xml => $_->html,
         text=> {
             file_count    => q| //dl[ @class="col1"]/dt[ . = "Files:"]/following-sibling::*[1] |,
@@ -36,7 +36,7 @@ onew { url => $_ }
     imdb_rating => do {
         my (undef, $rating) = ( ! $_->imdb_url )
             ? ( undef, "N/A" )
-            : S->XPath->match(
+            : S::XPath->match(
                 url => $_->imdb_url,
                 text => {
                     rating => q| //span[ @class="rating-rating" ]/text() |,

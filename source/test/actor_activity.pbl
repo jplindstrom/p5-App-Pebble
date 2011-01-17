@@ -1,6 +1,6 @@
 # echo "nm0000313" | pebble test/actor_activity.pbl --web_cache > test/actor_activity.png
 onew {
-    S->XPath->match(
+    S::XPath->match(
         url => "http://www.imdb.com/name/$_/",
         text => {
             name => q| //meta[ @name="title" ]/@content |,
@@ -13,7 +13,7 @@ onew {
 | ogrep { year => "numerical" }
 | ogroup_count { year => "movies" }
 | osort { "1+year" }
-| o { $_->year( S->DateTime->parse( $_->year ) ) }
+| o { $_->year( S::DateTime->parse( $_->year ) ) }
 | R->Graph->Basic({
     x    => "year",
     y    => "movies",
