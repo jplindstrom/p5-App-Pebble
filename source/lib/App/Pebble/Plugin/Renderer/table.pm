@@ -1,11 +1,11 @@
 
 =head1 NAME
 
-App::Pebble::Render::table - Render output as pretty table.
+App::Pebble::Plugin::Render::table - Render output as pretty table.
 
 =cut
 
-package App::Pebble::Render::table;
+package App::Pebble::Plugin::Render::table;
 use Moose;
 extends "App::Pebble::Render";
 

@@ -1,15 +1,15 @@
 
 =head1 NAME
 
-App::Pebble::Render::Graph::Basic - Render output as basic (good
-defaults, little flexibility) graph using L<Chart::Clicker>.
+App::Pebble::Plugin::Render::Graph::Basic - Render output as basic
+(good defaults, little flexibility) graph using L<Chart::Clicker>.
 
 If you need more specific rendering, you should probably write another
 renderer with a more flexible API.
 
 =cut
 
-package App::Pebble::Render::Graph::Basic;
+package App::Pebble::Plugin::Render::Graph::Basic;
 use Moose;
 extends "App::Pebble::Render";
 
