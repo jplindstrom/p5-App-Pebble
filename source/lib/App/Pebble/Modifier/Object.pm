@@ -27,6 +27,7 @@ our @EXPORT = qw(
     osort
     ogroup_count
     ogroup
+    otracer_bullet
     o
 );
 
@@ -163,6 +164,8 @@ sub ogrep (&) {
     my $subref = shift;
     my %field_condition = $subref->();
 
+    ###TODO: validate that for my $field ( keys %field_condition ) { are attributes
+
     my $condition_sub = {
         numerical => sub { _is_numerical( shift ) },
         defined   => sub { defined( shift ) },
@@ -172,7 +175,10 @@ sub ogrep (&) {
     return pgrep {
         for my $field ( keys %field_condition ) {
             my $condition = $field_condition{ $field };
-            my $sub = $condition_sub->{ $condition }
+
+            my $sub;
+            ref( $condition ) eq "CODE" and $sub = $condition;
+            $sub ||= $condition_sub->{ $condition }
                 or die( "Unknown condition ($condition) in ogrep():\n"
                       . "Allowed conditions are: "
                       . join( ", ", map { "'$_'" } keys %$condition_sub )
@@ -260,7 +266,9 @@ sub ogroup (&) {
                         for my $grouped_attribute ( keys %{ $into_attribute_grouped_attribute_function->{ $into_attribute } } ) {
                             my $function = $into_attribute_grouped_attribute_function->{ $into_attribute }->{ $grouped_attribute };
                             my $statistics = $by_value_statistics->{ $by_value }->{ $grouped_attribute };
-                            $new_attribute_value->{ $into_attribute } = $statistics->$function; ###TODO: validate $function
+                            my $value = $statistics->$function; ###TODO: validate $function
+                            $value ne int( $value ) and $value = sprintf( "%0.3f", $value );
+                            $new_attribute_value->{ $into_attribute } = $value;
                         }
                     }
 
@@ -270,6 +278,17 @@ sub ogroup (&) {
             return @grouped;
         }
       );
+}
+
+sub otracer_bullet (&) {
+    my $subref = shift;
+    my $message = $subref->();
+    my $count = 0;
+    return  o {
+        $count++;
+        ###TODO: log, or debug level
+        warn( "$message - $count\n" );
+    };
 }
 
 1;
