@@ -31,7 +31,7 @@ our @EXPORT = qw(
     o
 );
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 use List::MoreUtils qw/ each_arrayref uniq /;
 use Statistics::Descriptive;
 

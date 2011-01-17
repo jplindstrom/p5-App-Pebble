@@ -7,7 +7,7 @@ App::Pebble::Render::Graph - Collection of Graph plugins
 
 package App::Pebble::Render::Graph;
 use Moose;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use App::Pebble::Render::Graph::Basic;
 

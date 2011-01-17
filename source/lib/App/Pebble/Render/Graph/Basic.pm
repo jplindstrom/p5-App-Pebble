@@ -13,7 +13,7 @@ package App::Pebble::Render::Graph::Basic;
 use Moose;
 extends "App::Pebble::Render";
 
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use Data::Dumper;
 use IO::Pipeline;

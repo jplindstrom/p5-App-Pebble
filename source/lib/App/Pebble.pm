@@ -111,7 +111,7 @@ way to do things.
 package App::Pebble;
 use Moose;
 use MooseX::ClassAttribute;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;

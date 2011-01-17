@@ -7,7 +7,7 @@ App::Pebble::Parse - Base class for Pebble parsers
 
 package App::Pebble::Parse;
 use Moose;
-use MooseX::Method::Signatures;
+use Method::Signatures;
 
 use IO::Pipeline;
 use JSON::XS;

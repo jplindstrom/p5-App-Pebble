@@ -17,6 +17,7 @@
 **** DONE GET
 **** DONE XPaths
 *** SQLite db
+**** Is this a Parser or a Source?
 *** SQL query
 *** Data source dictionary in config
 *** MySQL resultset output
@@ -66,14 +67,31 @@
 *** allow it to be it's own script with .pbl extension
 *** Call with parameters which are available inside
 **** S->CLI->param( "name" );
-** differentiate between p and pmap
+** DONE differentiate between p and pmap
+*** DONE Nope, instead use o { } to always return object
 *** p always returns the object
 *** pmap might be used to return a different type of object or string
+** Try out another method thingy
+*** Bench
+**** time cat temp/kernel.log | perl bin/pebble.pl test/kernel_log.pbl
+*** use MooseX::Method::Signatures;
+**** 9s
+*** Method::Signatures
+**** 6s
+*** Method::Signatures in Pebble::Object
+**** 4s
 ** debug flag
 ** Log stuff
 ** Unify the R->, S-> etc
 *** whether they're inside a p {} or not
+*** Whether to take hash or hashref
 ** Unify Render / Renderer naming
+** Plugin system for R, P, S
+*** Syntax
+**** S("XPath")->match()
+**** P("Regex")->split()
+**** R("Chart::Basic")->render(x => "date", y => "date")
+*** 
 ** use Devel::Eval
 *** http://search.cpan.org/~adamk/Devel-Eval-1.01/lib/Devel/Eval.pm
 ** Lexical vars for each attribute
