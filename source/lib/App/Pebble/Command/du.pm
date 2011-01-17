@@ -11,13 +11,13 @@ extends "App::Pebble::Command";
 
 use Method::Signatures;
 
-use App::Pebble::Parse;
+use App::Pebble::Plugin::Parser::Regex;
 
 sub name    { "du" }
 sub command { "du -sk" }
 
 method parser($class: $args?) {
-    return App::Pebble::Parse->match(
+    return App::Pebble::Plugin::Parser::Regex->match(
         regex => qr/(\S+) \s+ (\S+)/x,
         has   => [  "size",   "file" ],
     );
