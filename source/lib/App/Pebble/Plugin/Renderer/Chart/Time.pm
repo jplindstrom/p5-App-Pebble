@@ -1,15 +1,21 @@
 
 =head1 NAME
 
-App::Pebble::Plugin::Render::Graph::Basic - Render output as basic
-(good defaults, little flexibility) graph using L<Chart::Clicker>.
+App::Pebble::Plugin::Render::Chart::Time - Chart of a sequence
+(normally time) series.
+
+=head1 DESCRIPTION
+
+Render output as basic (good defaults, little flexibility) chart using
+L<Chart::Clicker>. This is normally a chart with time (or any sequence
+really) on the X axis.
 
 If you need more specific rendering, you should probably write another
 renderer with a more flexible API.
 
 =cut
 
-package App::Pebble::Plugin::Renderer::Graph::Basic;
+package App::Pebble::Plugin::Renderer::Chart::Time;
 use Moose;
 
 use Method::Signatures;
@@ -33,7 +39,7 @@ method render($class: $args?) {
     my $width = $args->{width} || 500;
     my $title = $args->{title} || "";
     my $x = $args->{x};
-    my $y = $args->{y} or die( "Graph::Basic renderer missing 'y' parameter\n" );
+    my $y = $args->{y} or die( "Chart::Time renderer missing 'y' parameter\n" );
     ref( $y ) ne "ARRAY" and $y = [ $y ];
     my $y_min = $args->{y_min};
     my $type = $args->{type} || "Bar";
