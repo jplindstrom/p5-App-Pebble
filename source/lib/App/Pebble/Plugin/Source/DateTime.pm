@@ -21,6 +21,7 @@ sub DateTime::TO_JSON {
 # Needed by Pebble::Object and JSON::XS
 sub DateTime::Duration::TO_JSON {
     my $self = shift;
+    ###TODO: replace with format duration
     $self->in_units( "nanoseconds" );
 }
 
