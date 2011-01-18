@@ -12,19 +12,6 @@ use Method::Signatures;
 
 use DateTimeX::Easy;
 
-# Needed by Pebble::Object and JSON::XS
-sub DateTime::TO_JSON {
-    my $self = shift;
-    "$self";
-}
-
-# Needed by Pebble::Object and JSON::XS
-sub DateTime::Duration::TO_JSON {
-    my $self = shift;
-    ###TODO: replace with format duration
-    $self->in_units( "nanoseconds" );
-}
-
 method parse($class: $dt_string) {
     return DateTimeX::Easy->new( $dt_string );
 }
