@@ -43,7 +43,7 @@ sub main {
 
     my $output_sink = q{\*STDOUT};
     if( $output_renderer ) {
-        $output_renderer = "R->$output_renderer";
+        $output_renderer = "R::$output_renderer->render";
     }
 
     my $parser_stage;

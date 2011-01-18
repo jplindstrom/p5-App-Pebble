@@ -1,10 +1,10 @@
 # git log --date=short | pebble test/git_log_activity.pbl > test/git_log_activity.png
-P->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
+P::Regex->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
 | ogroup_count { date => "commit_count" }
 | osort { "date" }
-| o { $_->date( S->DateTime->parse( $_->date ) ) }
-| R->Graph->Basic({
+| o { $_->date( S::DateTime->parse( $_->date ) ) }
+| R::Graph::Basic->render({
     x => "date",
     y => "commit_count",
 })
-# | R->table
+# | R::Table->render

@@ -1,13 +1,12 @@
 
 =head1 NAME
 
-App::Pebble::Render::CSV - Render CSV output
+App::Pebble::Plugin::Render::CSV - Render CSV output
 
 =cut
 
-package App::Pebble::Render::CSV;
+package App::Pebble::Plugin::Renderer::CSV;
 use Moose;
-extends "App::Pebble::Render";
 
 use Method::Signatures;
 

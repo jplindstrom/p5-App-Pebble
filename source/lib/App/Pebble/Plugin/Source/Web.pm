@@ -1,11 +1,11 @@
 
 =head1 NAME
 
-App::Pebble::Source::Web - Web source, e.g. HTTP get
+App::Pebble::Plugin::Source::Web - Web source, e.g. HTTP get
 
 =cut
 
-package App::Pebble::Source::Web;
+package App::Pebble::Plugin::Source::Web;
 use Moose;
 
 use Method::Signatures;

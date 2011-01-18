@@ -1,4 +1,4 @@
-P->split({ has => { cpu_user => 7, cpu_sys => 8, cpu_idle => 9 } })
+P->split( has => { cpu_user => 7, cpu_sys => 8, cpu_idle => 9 } )
 | ogrep { cpu_user => "numerical", cpu_sys => "numerical" }
 | oadd { time => do {
     use DateTime;

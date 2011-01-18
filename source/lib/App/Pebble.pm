@@ -32,7 +32,7 @@ way to do things.
   # P->match: Parse matching lines into objects with named attributes.
   # The default output format is one-line JSON.
   cat lib/App/Pebble.pm | \
-  p 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })'
+  p 'P->match( regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] )'
   {"level":"1","text":"NAME"}
   {"level":"1","text":"SYNOPSIS"}
   {"level":"1","text":"DESCRIPTION"}
@@ -44,7 +44,7 @@ way to do things.
 
   # R->table: Do the same, but provide a Renderer (table) as the final stage
   cat lib/App/Pebble.pm | \
-  p 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] }) | R->table'
+  p 'P->match( regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] ) | R->table'
   .-------------------------------.
   | level | text                  |
   +-------+-----------------------+
@@ -58,7 +58,7 @@ way to do things.
   # not as the final stage.
   # You can install more renderers, and write your own.
   cat lib/App/Pebble.pm | \
-  p --out=CSV 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })'
+  p --out=CSV 'P->match( regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] )'
   level,text
   1,NAME
   1,SYNOPSIS
@@ -69,7 +69,7 @@ way to do things.
 
   # pgrep: Filter out headings with too long text
   cat lib/App/Pebble.pm | \
-  p --out=table 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] })
+  p --out=table 'P->match( regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] )
   | pgrep { length( $_->text) < 5 }'
   .--------------.
   | level | text |
@@ -84,7 +84,7 @@ way to do things.
   # "pmap" is so commonly used it's aliased to "p" for convenience.
   # Note that you still want the object itself to be passed along in the stream,
   # so you need to end the block with $_;
-  cat lib/App/Pebble.pm | p --out=table 'P->match({ regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] }) | p { $_->text( substr($_->text, 0, 5 )); $_ }'
+  cat lib/App/Pebble.pm | p --out=table 'P->match( regex => qr/^=head(\d+)\s+(.+)/, has => ["level", "text"] ) | p { $_->text( substr($_->text, 0, 5 )); $_ }'
   .---------------.
   | level | text  |
   +-------+-------+
@@ -117,16 +117,11 @@ use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 
-# To avoid confusing NYTProf that aliased takes time itself
-use App::Pebble::Parse;
-use App::Pebble::Render;
-use Pebble::Object::Class;
+use App::Pebble::Parser;
+use App::Pebble::Renderer;
 use App::Pebble::Source;
 
-use aliased "App::Pebble::Parse"    => "P";
-use aliased "App::Pebble::Render"   => "R";
 use aliased "Pebble::Object::Class" => "O";
-use aliased "App::Pebble::Source"   => "S";
 
 #TODO: plugin system
 use App::Pebble::Command::df;

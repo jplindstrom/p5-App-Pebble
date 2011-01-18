@@ -25,12 +25,12 @@ sub web_scraper_example {
     | p {
         O->mod {
             -delete => "url",
-            html => S->Web->get( $url ),
+            html => S::Web->get( $url ),
         }
     }
     | oadd {
-        S->XPath->match(
-            url => $url,  # Get it first using S->Web->get, can aso be "file", etc.
+        S::XPath->match(
+            url => $url,  # Get it first using S::Web->get, can aso be "file", etc.
             value => {
                 author => "//book/author",
             }
@@ -38,7 +38,7 @@ sub web_scraper_example {
     }
     | oreplace {
         html => {
-            S->XPath->match(
+            S::XPath->match(
                 xml => $html,
                 value => { # text? also get attributes, etc.
                     title                   => "/html/head/title",
@@ -80,7 +80,7 @@ sub mod_object {
             -delete  => ["html"], # or single scalar for one
             -keep    => ["id", "name"],
             -add     => { size => 23 }, # Or Object::Collection with keys/values
-            -replace => { url => { html => S->Web->get( $url ) } } # Or Object::Collection with keys/values
+            -replace => { url => { html => S::Web->get( $url ) } } # Or Object::Collection with keys/values
             "title"  => $title,
         };
     }
@@ -96,7 +96,7 @@ sub concurrency {
     p { 1..10 }
     | pnew { url => "http://abc/$_" }
     | pconcurrent {
-        oadd { html => S->Web->get( $url ) }
+        oadd { html => S::Web->get( $url ) }
     }
     | pkeep { "url" }
 }
@@ -112,7 +112,7 @@ sub get_missing_bc {
         end_time   => $date->clone->add( days => 1 ),
     }
     | oadd {
-        S->XPath->match(
+        S::XPath->match(
             url  => "http://piabcps/bc/start/$start_time/end/$end_time/",
             text => { "bc_pid[Array]" => '//change_to/@pid' },
         ),
@@ -120,7 +120,7 @@ sub get_missing_bc {
     | p { map { O->new( "pid[Num]" => $_ ) } @$bc_pid }
     # or: onew_from_field { bc_pid => "pid[Num]" } # really?
     | oadd {
-        S->XPath->match(
+        S::XPath->match(
             url => "http:/dynabcte/idtype/id/$pid",
             text => { exists => "//type/[ text() = 'bc' ]}" },
         );
