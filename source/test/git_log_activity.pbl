@@ -4,7 +4,8 @@ P::Regex->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
 | osort { "date" }
 | o { $_->date( S::DateTime->parse( $_->date ) ) }
 | R::Chart::Time->render({
-    x => "date",
-    y => "commit_count",
+    x    => "date",
+    y    => "commit_count",
+    file => "test/git_log_activity.png",
 })
 # | R::Table->render

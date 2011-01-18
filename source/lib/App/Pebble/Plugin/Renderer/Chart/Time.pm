@@ -30,6 +30,7 @@ use Chart::Clicker::Axis::DateTime;
 # use Chart::Clicker::Data::Marker;
 # use Geometry::Primitive::Rectangle;
 # use Graphics::Color::RGB;
+use File::Slurp qw/ write_file /;
 
 method needs_pool { 1 }
 
@@ -43,6 +44,10 @@ method render($class: $args?) {
     ref( $y ) ne "ARRAY" and $y = [ $y ];
     my $y_min = $args->{y_min};
     my $type = $args->{type} || "Bar";
+    my $file = $args->{file};
+    $file &&= do {
+        $file =~ /\.\w+$/ or "$file.png";
+    };
 
     my $cc = Chart::Clicker->new( width => $width, height => $height );
 
@@ -117,7 +122,14 @@ method render($class: $args?) {
           );
 
           $cc->draw;
-          $cc->rendered_data;
+
+          if( $file ) {
+              write_file( $file, { binmode => ":raw" }, $cc->rendered_data );
+              return ();
+          }
+          else {
+              return $cc->rendered_data;
+          }
       },
   );
 }
