@@ -26,7 +26,7 @@ method load_plugins($class:) {
         $short =~ s/^$package_prefix/$package_abbreviation/;
         
         $short => $_;
-    } Class::Autouse::_child_classes( $package_prefix );
+    } Class::Autouse::_children( $package_prefix );
 
     for my $short ( keys %short_long ) {
         my $long = $short_long{ $short };
