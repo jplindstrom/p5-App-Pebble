@@ -29,6 +29,7 @@ our @EXPORT = qw(
 use IO::Pipeline;
 use DateTime;
 use DateTime::Duration;
+use Format::Human::Bytes;
 
 {
     no warnings "once";
@@ -74,8 +75,11 @@ sub pprogress (&) {
 
             my $duration_s = $now - $start_time;
             my $objects_per_s = sprintf( "%0.1f", $count / ( $duration_s || 1 ) );
-            
-            my $progress = "$count $duration_text [$objects_per_s/s]";
+
+            my $count_k = Format::Human::Bytes::base10( $count );
+            my $objects_per_s_k = Format::Human::Bytes::base10( $objects_per_s, 1 );
+            s/B$// for ( $count_k, $objects_per_s_k );
+            my $progress = sprintf( "%4s $duration_text [$objects_per_s_k/s]  ", $count_k );
 
             local $\ = undef;
             print STDERR "\r$progress";
