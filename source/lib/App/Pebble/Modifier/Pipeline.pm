@@ -56,41 +56,53 @@ sub pn () {
     return pmap { "$_\n" };
 }
 
-sub pprogress (&) {
-    my ($limit_subref) = @_;
-    #$limit_subref->();
+sub pprogress (;&) {
+    my ($subref) = @_;
+    my %args = $subref ? $subref->() : ();
+    my $message = $args{ message } || "";
 
     my $count = 0;
     my $start_time = time();
     my $start_dt = DateTime->now();
     my $last_time = $start_time;
-    return pmap {
-        $count++;
-
-        my $now = time();
-        if( $now - $last_time >= 1 ) {
-            my $now_dt = DateTime->now();
-            my $duration = $now_dt - $start_dt;
-            my $duration_text = join( ":", map { $duration->$_ } qw/ hours minutes seconds / );
-
-            my $duration_s = $now - $start_time;
-            my $objects_per_s = sprintf( "%0.1f", $count / ( $duration_s || 1 ) );
-
-            my $count_k = Format::Human::Bytes::base10( $count );
-            my $objects_per_s_k = Format::Human::Bytes::base10( $objects_per_s, 1 );
-            s/B$// for ( $count_k, $objects_per_s_k );
-            my $progress = sprintf( "%4s $duration_text [$objects_per_s_k/s]  ", $count_k );
-
-            local $\ = undef;
-            print STDERR "\r$progress";
-
+    return IO::Pipeline->from_code_map_all(
+        sub {
+            $_ && ref( $_ ) eq "IO::Pipeline::Control::BOF" and return $_;
+            $_ && ref( $_ ) eq "IO::Pipeline::Control::EOF" and do {
+                print STDERR "\n";
+                return $_;
+            };
+            
+            $count++;
+            
+            my $now = time();
+            if( $now - $last_time >= 1 ) {
+                my $now_dt = DateTime->now();
+                my $duration = $now_dt - $start_dt;
+                my $duration_text = join(
+                    ":",
+                    map { $duration->$_ } qw/ hours minutes seconds /
+                );
+                
+                my $duration_s = $now - $start_time;
+                my $objects_per_s = sprintf( "%0.1f", $count / ( $duration_s || 1 ) );
+                
+                my $count_k = Format::Human::Bytes::base10( $count );
+                my $objects_per_s_k = Format::Human::Bytes::base10( $objects_per_s, 1 );
+                s/B$// for ( $count_k, $objects_per_s_k );
+                my $progress = sprintf( "%4s [$objects_per_s_k/s] $duration_text", $count_k );
+                $message and $progress .= " - $message";
+                
+                local $\ = undef;
+                print STDERR "\r$progress";
+                
+            }
+            
+            $last_time = $now;
+            
+            $_;
         }
-
-        $last_time = $now;
-
-        $_;
-    }
-
+    );
 }
 
 1;
