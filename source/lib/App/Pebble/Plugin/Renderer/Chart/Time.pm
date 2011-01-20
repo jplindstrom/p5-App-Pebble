@@ -46,7 +46,7 @@ method render($class: $args?) {
     my $type = $args->{type} || "Bar";
     my $file = $args->{file};
     $file &&= do {
-        $file =~ /\.\w+$/ or "$file.png";
+        $file =~ /\.\w+$/ ? $file : "$file.png";
     };
 
     my $cc = Chart::Clicker->new( width => $width, height => $height );
