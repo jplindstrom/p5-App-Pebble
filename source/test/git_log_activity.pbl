@@ -1,5 +1,6 @@
-# git log --date=short | pebble test/git_log_activity.pbl > test/git_log_activity.png
+# git log --date=short | pebble test/git_log_activity.pbl
 P::Regex->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
+| pprogress { message => sub { "Date: " . $_->date } }
 | ogroup_count { date => "commit_count" }
 | osort { "date" }
 | o { $_->date( S::DateTime->parse( $_->date ) ) }
