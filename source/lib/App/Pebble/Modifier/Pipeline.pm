@@ -60,6 +60,11 @@ sub pprogress (;&) {
     my ($subref) = @_;
     my %args = $subref ? $subref->() : ();
     my $message = $args{ message } || "";
+    my $message_sub;
+    if( ref( $message ) eq "CODE" ) {
+        $message_sub = $message;
+        $message = "";
+    }
 
     my $count = 0;
     my $start_time = time();
@@ -91,7 +96,9 @@ sub pprogress (;&) {
                 my $objects_per_s_k = Format::Human::Bytes::base10( $objects_per_s, 1 );
                 s/B$// for ( $count_k, $objects_per_s_k );
                 my $progress = sprintf( "%4s [$objects_per_s_k/s] $duration_text", $count_k );
-                $message and $progress .= " - $message";
+
+                $message     and $progress .= " - $message";
+                $message_sub and $progress .= " - " . $message_sub->();
                 
                 local $\ = undef;
                 print STDERR "\r$progress";
