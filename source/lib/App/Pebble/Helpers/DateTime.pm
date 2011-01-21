@@ -38,7 +38,8 @@ sub DateTime::Duration::TO_JSON {
 =head2 round( $to_unit = "day" ) : $self
 
 Round off the datetime $to_unit ( "year" | "month" | "day" | "hour" |
-"minute" | "second" ) by setting the smaller units to 0 (minutes) or 1 (month).
+"minute" | "second" ) by setting the smaller units to 0 (e.g. minutes)
+or 1 (e.g. month).
 
 Change the object in-place.
 
