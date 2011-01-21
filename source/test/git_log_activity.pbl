@@ -1,13 +1,14 @@
 # git log --date=short | pebble test/git_log_activity.pbl
 P::Regex->match( regex => qr/Date:   (\d+-\d+-\d+)/, has => "date" )
 | pprogress { message => sub { "Date: " . $_->date } }
+| o { $_->date( S::DateTime->parse( $_->date ) ) }
+| o { $_->date->round( "month" ) }
 | ogroup_count { date => "commit_count" }
 | osort { "date" }
-| o { $_->date( S::DateTime->parse( $_->date ) ) }
 | R::Chart::Time->render({
     x     => "date",
-    x_min => 0,
     y     => "commit_count",
+    y_min => 0,
     file  => "test/git_log_activity.png",
 })
-# | R::Table->render
+# | R::table->render
