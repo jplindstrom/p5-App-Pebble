@@ -86,14 +86,18 @@
 **** Also put an alias in place to allow for a shorter access path
 ***** Required sub autouse to return the list of autoused package names
 ***** or call private method
-** Replace Graph with Chart
+** DONE Replace Graph with Chart
+** Fix Chart:Time render to use a hash, not a hashref
+** Chart::Time error
+*** If catch this, sort on x, then re-run
+**** Span cannot start after the end in DateTime::Span->from_datetimes
 ** debug flag
 ** Log stuff
-** Unify the R->, S-> etc
-*** whether they're inside a p {} or not
+** DONE Unify the R->, S-> etc
+*** DONE whether they're inside a p {} or not
 *** Whether to take hash or hashref
 ** Unify Render / Renderer naming
-** Plugin system for R, P, S
+** DONE Plugin system for R, P, S
 *** Syntax
 **** S("XPath")->match()
 **** P("Regex")->split()
@@ -110,7 +114,7 @@
 *** regular $a $b
 ** DONE osort
 *** osort { "1-method_name" }
-** group by
+** DONE group by
 *** ogroup { -by => "q", -count => "count" }'
 **** by scalar or array ref
 **** use statistics module
