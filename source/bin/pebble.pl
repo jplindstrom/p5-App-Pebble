@@ -60,7 +60,7 @@ sub main {
                 $user_stage = read_file( $user_stage );
             }
             else {
-                $user_stage =~ /[{(]/ or die( "This ($user_stage) isn't a file, and doesn't look like Pebble code.\n" );
+                $user_stage =~ /[{(]|(->)/ or die( "This ($user_stage) isn't a file, and doesn't look like Pebble code.\n" );
             }
 
             # Remove comments
