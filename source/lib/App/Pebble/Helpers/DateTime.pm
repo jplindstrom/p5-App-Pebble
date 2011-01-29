@@ -1,12 +1,12 @@
 
 =head1 NAME
 
-App::Pebble::Helpers::DateTime - DateTime/Duration helpers.
+App::Pebble::Helpers::DateTime - DateTime helpers.
 
 =head1 DESCRIPTION
 
-Support DateTime and DateTime::Dueration objects "natively" by making
-sure they TO_JSON-ify properly.
+Support DateTime objects "natively" by making sure they TO_JSON-ify
+properly, and provide some useful helper methods.
 
 =cut
 
@@ -15,7 +15,6 @@ use strict;
 use warnings;
 
 use DateTime;
-use DateTime::Duration;
 use Carp;
 
 =head2 METHODS
@@ -28,14 +27,7 @@ sub DateTime::TO_JSON {
     "$self";
 }
 
-# Needed by Pebble::Object and JSON::XS
-sub DateTime::Duration::TO_JSON {
-    my $self = shift;
-    ###TODO: replace with format duration
-    $self->in_units( "nanoseconds" );
-}
-
-=head2 round( $to_unit = "day" ) : $self
+=head2 DateTime::round( $to_unit = "day" ) : $self
 
 Round off the datetime $to_unit ( "year" | "month" | "day" | "hour" |
 "minute" | "second" ) by setting the smaller units to 0 (e.g. minutes)

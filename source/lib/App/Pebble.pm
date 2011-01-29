@@ -118,6 +118,7 @@ use List::MoreUtils qw/ each_arrayref /;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 
 use App::Pebble::Helpers::DateTime;
+use App::Pebble::Helpers::DateTime::Duration;
 
 use App::Pebble::Parser;
 use App::Pebble::Renderer;
