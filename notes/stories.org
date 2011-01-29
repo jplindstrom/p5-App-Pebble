@@ -18,6 +18,7 @@
 **** DONE XPaths
 *** SQLite db
 **** Is this a Parser or a Source?
+***** Source, it doesn't transform lines into objects
 *** SQL query
 *** Data source dictionary in config
 *** MySQL resultset output
@@ -61,7 +62,28 @@
 *** Make it a plugin-like thing
 ** DONE Global cache manager, for e.g. caching http requests
 *** can be reset for all, or for a type e.g. Web
+
+** Fix Chart:Time render to use a hash, not a hashref
 ** TODO ppool signature can be &;&&
+** Regex match convenience
+*** Source
+oreplace { url => {
+# Returns pairs of keys values (can be undef)
+S::Regex->match( url => { user_id => qr|user_id/(\w+)| } }
+} }
+*** Modifier
+oadd_match { url => { user_id => qr|user_id/(\w+)| } }
+** ogroup convenience
+*** Expand many statistics calls
+| ogroup {
+ widget => {
+   time_taken  => [qw/ mean max min median sum /], # time_taken_mean
+   time_taken_ => [qw/ mean max min median sum /], # time_taken_mean (default is postfix)
+   _time_taken => [qw/ mean max min median sum /], # mean_time_taken
+ },
+}
+** DBIx::Simple
+*** 
 ** CLI
 *** DONE Call with script file or source
 *** allow it to be it's own script with .pbl extension
@@ -83,16 +105,52 @@
 ** TODO Plugins
 *** Load plugins on demand
 **** Class::Autouse
-**** Also put an alias in place to allow for a shorter access path
-***** Required sub autouse to return the list of autoused package names
+**** DONE Also put an alias in place to allow for a shorter access path
+***** TODO Required sub autouse to return the list of autoused package names
 ***** or call private method
+*** TODO Option to load form anywhere in @INC, not just where the base class was found
 ** DONE Replace Graph with Chart
-** Fix Chart:Time render to use a hash, not a hashref
+** GraphViz
+*** Template
+digraph xxx {
+rankdir = "LR"
+fontname = "Verdana"
+fontsize = 10
+
+node [
+ fontname = "Verdana"
+ fontsize = 10
+ shape = "box"
+]
+edge [
+ fontname = "Verdana"
+ fontsize = 10
+]
+
+a -> b
+}
 ** Chart::Time error
 *** If catch this, sort on x, then re-run
 **** Span cannot start after the end in DateTime::Span->from_datetimes
+*** Another
+This axis has a span of 0, that's fatal! at /home/lindsj05/local_cpan/lib/perl5/Chart/Clicker/Axis.pm line 139, <STDIN> line 81.
+   ...propagated at /home/lindsj05/Personal/Dev/CPAN/App-Pebble/source/lib/App/Pebble.pm line 154, <STDIN> line 81.
+**** If all items have the same value: Axis is zero. That's rubbish
+***** Manually set the axis max to 1?
+
 ** debug flag
+*** Idea
+**** When in debug mode, always output the first line to aid writing the regex.
 ** Log stuff
+** Command Line arguments
+*** 1
+S::CLI->options
+*** 2
+S::GetOpt->options(
+"whatever:s", "debug"
+)
+*** Returns hash ref
+*** First time needs a parse definition, then return the options hash ref
 ** DONE Unify the R->, S-> etc
 *** DONE whether they're inside a p {} or not
 *** Whether to take hash or hashref
