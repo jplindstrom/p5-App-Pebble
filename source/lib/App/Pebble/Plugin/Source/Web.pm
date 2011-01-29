@@ -17,6 +17,7 @@ method get_response($class: $url) {
     require App::Pebble;
 warn "Getting ($url)\n";
     my $ua = LWP::UserAgent::WithCache->new();
+    $ua->env_proxy;
     $ua->{cache} = App::Pebble->cache; # so sue me, provide a useful interface then
 
     # Ignore the response "expires" header, always use cache if

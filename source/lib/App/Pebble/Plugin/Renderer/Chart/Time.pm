@@ -42,7 +42,7 @@ method render($class: $args?) {
     my $x = $args->{x};
     my $y = $args->{y} or die( "Chart::Time renderer missing 'y' parameter\n" );
     ref( $y ) ne "ARRAY" and $y = [ $y ];
-    my $y_min = $args->{y_min};
+    my $y_min = exists $args->{y_min} ? $args->{y_min} : 0;
     my $type = $args->{type} || "Bar";
     my $file = $args->{file};
     $file &&= do {

@@ -15,11 +15,20 @@ use Moose;
 use Method::Signatures;
 
 use DateTime::Format::Duration;
+use Time::Elapsed qw( elapsed );
 
 method format($class: $duration, $format = "%s") {
     return DateTime::Format::Duration->new(
-      pattern => $format,
+        pattern => $format,
     )->format_duration( $duration );
+}
+
+method human($class: $duration) {
+    my $elapsed = elapsed( $class->format( $duration ) );
+    $elapsed =~ s/((\d) (\w)\w+)/$2$3/g;
+    $elapsed =~ s/ and /, /g;
+  
+    return $elapsed;
 }
 
 1;
