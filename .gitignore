@@ -3,3 +3,4 @@
 /source/temp
 *_flymake.*
 /source/lib/App/Pebble/Plugin/Parser/Dynamite.pm
+/source/example
