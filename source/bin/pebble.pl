@@ -103,5 +103,49 @@ warn "Cache dir: ($cache_dir)\n";
       );
 }
 
+__END__
 
-# Dec 02 02:48:35  [68] kCGErrorIllegalArgument: CGXSetWindowFilter: Invalid filter 2
+=head1 NAME
+
+pebble
+
+=head1 SYNOPSIS
+
+  pebble
+    [--nostdin]
+    [--cmd=COMMAND_WITH_ARGS]
+    [--out=PARSER]
+    [ PEBBLE_SOURCE_CODE PEBBLE_SOURCE_CODE ... ]
+    [--web_cache [=flush] ]
+    [--script]
+
+=over 4
+
+=item --nostdin
+
+=item --cmd
+
+=item --out
+
+=item PEBBLE_SOURCE_CODE
+
+=item --web_cache
+
+Use a file based cache for all web requests. If it's in the cache, don't touch the Net.
+
+=item --web_cache=flush
+
+Before using the cache, clear it.
+
+=item --script
+
+Don't run any Pebble source code, instead print all of it.
+
+This is so that you can easily transfer ad-hoc scripting on the command line to a more reusable script.
+
+Recommended file extension for Pebble scripts: .pbl
+Make sure your editor syntax highlights this as Perl.
+
+=back
+
+=head1 DESCRIPTION
