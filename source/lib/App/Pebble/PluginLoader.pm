@@ -9,7 +9,7 @@ package App::Pebble::PluginLoader;
 use Moose;
 use Method::Signatures;
 
-use Class::Autouse;
+use Class::Autouse 2.00;
 
 sub package_prefix       { die( "Abstract\n" ) }
 sub package_abbreviation { die( "Abstract\n" ) }
