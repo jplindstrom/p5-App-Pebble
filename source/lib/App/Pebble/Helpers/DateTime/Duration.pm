@@ -6,7 +6,7 @@ App::Pebble::Helpers::DateTime::Duration - DateTime::Duration helpers.
 =head1 DESCRIPTION
 
 Support DateTime::Duration "natively" by making sure they TO_JSON-ify
-properly, and provide some useful extra helper methods
+properly, and provide some useful extra helper methods.
 
 =cut
 
@@ -48,7 +48,7 @@ method DateTime::Duration::format($format = "%s") {
     )->format_duration( $self );
 }
 
-=head2 DateTime::Duration::format( $format = "%s" ) : $human_redable_string
+=head2 DateTime::Duration::human() : $human_redable_string
 
 Return a human-readable string, e.g. "8h, 2m, 24s".
 

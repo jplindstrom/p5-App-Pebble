@@ -35,7 +35,7 @@ or 1 (e.g. month).
 
 Change the object in-place.
 
-Note: This should be ported into DateTime proper. It's just here for
+Note: This could be ported into DateTime proper. It's just here for
 now to provide a convenience function.
 
 =cut
