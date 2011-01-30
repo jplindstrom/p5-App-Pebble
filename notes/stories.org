@@ -73,6 +73,7 @@ S::Regex->match( url => { user_id => qr|user_id/(\w+)| } }
 } }
 *** Modifier
 oadd_match { url => { user_id => qr|user_id/(\w+)| } }
+** Rename Renderer::Table -> Renderer::table
 ** ogroup convenience
 *** Expand many statistics calls
 | ogroup {
