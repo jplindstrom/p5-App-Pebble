@@ -1,11 +1,13 @@
 
 =head1 NAME
 
-App::Pebble::Source - Source plugins
+App::Pebble::Source - Source plugin loader
 
 =head1 DESCRIPTION
 
 Sources bring data sideways into objects in the stream.
+
+Source plugins have the prefix S::
 
 Sources always go inside o {}.
 

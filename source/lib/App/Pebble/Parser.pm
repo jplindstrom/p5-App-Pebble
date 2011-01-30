@@ -1,11 +1,13 @@
 
 =head1 NAME
 
-App::Pebble::Parser - Parser plugins
+App::Pebble::Parser - Parser plugin loader
 
 =head1 DESCRIPTION
 
 Parsers convert data in the stream into objects.
+
+Parser plugins have the prefix P::
 
 Parsers always go in the stream, never inside p {} or o {}.
 

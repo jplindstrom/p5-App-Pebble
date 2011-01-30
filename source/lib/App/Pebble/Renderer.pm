@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-App::Pebble::Renderer - Renderer plugins
+App::Pebble::Renderer - Renderer plugin loader
 
 =head1 DESCRIPTION
 
@@ -11,6 +11,8 @@ stream but sometimes sideways.
 Some renderers are lazy, i.e. they are able to convert a single object
 to some output representation. Some are eager, i.e. they need to read
 the whole dataset before they can output anything.
+
+Render plugins have the prefix R::
 
 Renderers always go in the stream, never inside p {} or o {}.
 
