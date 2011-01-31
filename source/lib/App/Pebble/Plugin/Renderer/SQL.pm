@@ -12,7 +12,7 @@ use Method::Signatures;
 
 use IO::Pipeline;
 
-method insert($class: :$table, :$columns?) {
+method insert($class: :$table!, :$columns?) {
     $columns && ref( $columns ) ne "ARRAY" and $columns = [ $columns ];
     ###TODO: statement_terminator = ";"
     ###TODO: statement_separator = "";  # can be "\n\n"
@@ -32,6 +32,7 @@ method insert($class: :$table, :$columns?) {
 
     my $quoted_sub = sub {
         my ($attribute, $value) = @_;
+        defined $value or return "NULL";
         $column_quoted->{ $attribute } and return qq/"$value"/;
         return $value;
     };
