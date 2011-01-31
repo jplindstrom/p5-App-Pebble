@@ -7,12 +7,14 @@ use warnings;
 use Getopt::Long;
 use Data::Dumper;
 use File::HomeDir;
+use Path::Class;
 use Cache::FileCache;
 use Cache::NullCache;
 use File::Slurp qw/ read_file /;
 
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
+use App::Pebble::Log qw/ $log /;
 
 #TODO: plugin system
 use App::Pebble::Command::df;
@@ -28,8 +30,29 @@ sub main {
         "cmd:s"          => \( my $cmd ),
         "web_cache:s"    => \( my $web_cache = Cache::NullCache->new() ),
         "script"         => \( my $script ),
+        "verbose:i"      => \( my $screen_log_level = 2 ), # notice and higher
+        "log_file:s"     => \( my $log_file ),
+        "info"           => \( my $info ),
     );
+    $info and info(), exit(0);
 
+    ###TODO: move into init
+    
+    $log_file ||= do {
+        my $log_dir = File::HomeDir->my_dist_data(
+            'App-Pebble/log',
+            { create => 1 }
+        );        
+        file( $log_dir, "pebble.log" ) . "";
+    };
+    my $file_log_level = $ENV{PEBBLE_LOG_LEVEL};
+    defined $file_log_level or $file_log_level = 1; # info and higher
+    App::Pebble::Log->init(
+        file         => $log_file,
+        file_level   => $file_log_level,
+        screen_level => $screen_log_level,
+    );
+    
     my $input_source = q{\*STDIN};
     my $input_source_fh;
     if( $cmd && $cmd =~ /^(\S+)/ ) {
@@ -83,8 +106,8 @@ sub main {
     my $pebble = App::Pebble->new;
 
     if( defined $web_cache ) {
-        my $cache_dir = File::HomeDir->my_dist_data( 'App-Pebble-web', { create => 1 } );
-warn "Cache dir: ($cache_dir)\n";
+        my $cache_dir = File::HomeDir->my_dist_data( 'App-Pebble/web', { create => 1 } );
+        $log->info( "Cache dir ($cache_dir)" );
         my $cache = App::Pebble->cache( Cache::FileCache->new({ cache_root => $cache_dir }) );
         $web_cache eq "flush" and $cache->clear();
     }
@@ -103,6 +126,13 @@ warn "Cache dir: ($cache_dir)\n";
       );
 }
 
+sub info {
+    print "Pebble v$App::Pebble::VERSION\n\n";
+
+    my $dir = File::HomeDir->my_dist_data( "App-Pebble", { create => 1 } );
+    print "App directory: $dir\n"
+}
+
 __END__
 
 =head1 NAME
@@ -117,7 +147,7 @@ pebble
     [--out=PARSER]
     [ PEBBLE_SOURCE_CODE PEBBLE_SOURCE_CODE ... ]
     [--web_cache [=flush] ]
-    [--script]
+    [--script [=NEW_SCRIPT_FILE] ]
 
 =over 4
 

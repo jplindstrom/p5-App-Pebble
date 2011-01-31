@@ -117,6 +117,8 @@ use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 
+use App::Pebble::Log qw/ $log /;
+
 use App::Pebble::Helpers::DateTime;
 use App::Pebble::Helpers::DateTime::Duration;
 
@@ -154,8 +156,8 @@ class_has cache => ( is => "rw" );
 method pipeline( $stages, $input_source, $input_source_fh ) {
     @$stages = grep { $_ } @$stages;
     my $pipeline_perl = join( " |\n", @$stages );
-
-warn "((($pipeline_perl)))\n";
+    
+    $log->info( "((($pipeline_perl)))" );
     eval $pipeline_perl;
     $@ and die;
 
