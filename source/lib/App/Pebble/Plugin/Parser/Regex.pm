@@ -11,7 +11,6 @@ use Moose;
 use Method::Signatures;
 
 use IO::Pipeline;
-use JSON::XS;
 
 use Pebble::Object::Class;
 
