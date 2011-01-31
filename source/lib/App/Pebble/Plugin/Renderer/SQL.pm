@@ -51,7 +51,7 @@ method insert($class: :$table!, :$columns?) {
             . ") VALUES ("
             . join( ", ", map { $quoted_sub->( $_ => $pebble->$_ ) } @$columns )
             ###TODO: escape values
-            . ");";
+            . ");\n";
 
         $statement;
     };
