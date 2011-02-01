@@ -23,16 +23,16 @@ use App::Pebble::Command::du;
 main();
 sub main {
     GetOptions(
-        "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
-        "default_post:s" => \( my $default_post ),  # 'pmap { "$_\n" }' ),
-        "parser:s"       => \( my $parser ),
-        "out:s"          => \( my $output_renderer ),
-        "cmd:s"          => \( my $cmd ),
-        "web_cache:s"    => \( my $web_cache = Cache::NullCache->new() ),
-        "script"         => \( my $script ),
-        "verbose:i"      => \( my $screen_log_level = 2 ), # notice and higher
-        "log_file:s"     => \( my $log_file ),
-        "info"           => \( my $info ),
+        "default_pre:s"      => \( my $default_pre = 'pmap { chomp; $_ }' ),
+        "default_post:s"     => \( my $default_post ),  # 'pmap { "$_\n" }' ),
+        "parser:s"           => \( my $parser ),
+        "out:s"              => \( my $output_renderer ),
+        "cmd:s"              => \( my $cmd ),
+        "web_cache:s"        => \( my $web_cache = Cache::NullCache->new() ),
+        "script"             => \( my $script ),
+        "screen_log_level:i" => \( my $screen_log_level = 2 ), # notice and higher
+        "log_file:s"         => \( my $log_file ),
+        "info"               => \( my $info ),
     );
     $info and info(), exit(0);
 
@@ -127,7 +127,7 @@ sub main {
 }
 
 sub info {
-    print "Pebble v$App::Pebble::VERSION\n\n";
+    print "Pebble\n\n";
 
     my $dir = File::HomeDir->my_dist_data( "App-Pebble", { create => 1 } );
     print "App directory: $dir\n"
