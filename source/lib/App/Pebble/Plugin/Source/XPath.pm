@@ -13,6 +13,7 @@ use File::Slurp qw/ read_file /;
 use XML::LibXML;
 use XML::LibXML::XPathContext;
 
+use App::Pebble::Log qw/ $log /;
 use App::Pebble::Plugin::Source::Web;
 use Data::Dumper;
 
@@ -34,7 +35,7 @@ method match($class: :$xml?, :$url?, :$file?, :$text?) {
     ###TODO: set namespace?
 
     my $xpc = XML::LibXML::XPathContext->new( $dom->documentElement )
-       or warn( "Could not create XPathContext\n" ), return ();
+       or $log->error( "Could not create XPathContext" ), return ();
 
     my %key_value;
     for my $key ( keys %$text ) {
@@ -81,7 +82,7 @@ method parse_xml($class: $xml, $content_type?) {
         my $parser = XML::LibXML->new();
         $parser->recover(1);
         $parser->$parse_method($xml);
-    } or warn( "Invalid ((($xml))), parsed as ($content_type)\n" ), return undef;
+    } or $log->error( "Invalid ((($xml))), parsed as ($content_type)" ), return undef;
 
     return $dom;
 }
