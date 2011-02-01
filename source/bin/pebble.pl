@@ -79,7 +79,7 @@ sub main {
             my $user_stage = $_;
 
             # If file exists, load it
-            if( -r $user_stage ) {
+            if( $user_stage !~ /\n/ && -r $user_stage ) {
                 $user_stage = read_file( $user_stage );
             }
             else {
