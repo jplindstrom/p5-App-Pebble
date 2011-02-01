@@ -13,9 +13,11 @@ use Method::Signatures;
 use LWP::UserAgent::WithCache;
 use Data::Dumper;
 
+use App::Pebble::Log qw/ $log /;
+
 method get_response($class: $url) {
     require App::Pebble;
-warn "Getting ($url)\n";
+    $log->info( "Getting ($url)" );
     my $ua = LWP::UserAgent::WithCache->new();
     $ua->env_proxy;
     $ua->{cache} = App::Pebble->cache; # so sue me, provide a useful interface then

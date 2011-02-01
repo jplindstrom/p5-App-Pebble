@@ -157,7 +157,7 @@ method pipeline( $stages, $input_source, $input_source_fh ) {
     @$stages = grep { $_ } @$stages;
     my $pipeline_perl = join( " |\n", @$stages );
     
-    $log->info( "((($pipeline_perl)))" );
+    $log->debug( "((($pipeline_perl)))" );
     eval $pipeline_perl;
     $@ and die;
 

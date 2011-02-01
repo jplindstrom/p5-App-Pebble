@@ -35,6 +35,8 @@ use Method::Signatures;
 use List::MoreUtils qw/ each_arrayref uniq /;
 use Statistics::Descriptive;
 
+use App::Pebble::Log qw/ $log /;
+
 use aliased "Pebble::Object::Class" => "O";
 use App::Pebble::Modifier::Pipeline;
 
@@ -287,7 +289,7 @@ sub otracer_bullet (&) {
     return  o {
         $count++;
         ###TODO: log, or debug level
-        warn( "$message - $count\n" );
+        $log->warning( "$message - $count" );
     };
 }
 
