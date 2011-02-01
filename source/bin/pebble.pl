@@ -144,7 +144,7 @@ pebble
   pebble
     [--nostdin]
     [--cmd=COMMAND_WITH_ARGS]
-    [--out=PARSER]
+    [--out=RENDERER]
     [ PEBBLE_SOURCE_CODE PEBBLE_SOURCE_CODE ... ]
     [--web_cache [=flush] ]
     [--script [=NEW_SCRIPT_FILE] ]
