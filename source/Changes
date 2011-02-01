@@ -2,6 +2,17 @@ Revision history for App-Pebble
 
 {{$NEXT}}
 
+
+
+0.008 -- 2011-02-01 00:14:31 UTC
+
+* Logging
+
+* Parser::CSV
+
+* Renderer::SQL
+
+
 0.007 -- 2011-01-30 23:15:46 UTC
 
 Developer release.
