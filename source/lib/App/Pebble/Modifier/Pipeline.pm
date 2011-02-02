@@ -66,6 +66,8 @@ sub pprogress (;&) {
         $message = "";
     }
 
+    ###TODO: obey --verbose
+
     my $count = 0;
     my $start_time = time();
     my $start_dt = DateTime->now();
