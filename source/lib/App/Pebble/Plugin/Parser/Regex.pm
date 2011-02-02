@@ -1,3 +1,4 @@
+# -*- mode: cperl; cperl-indent-level: 4; -*-
 
 =head1 NAME
 
@@ -58,16 +59,37 @@ method _split_line_index($class: $split, $has_index, $line) {
     return $class->_index_values_to_fields( $has_index, \@values );
 }
 
-method match($class: :$regex!, :$has = []) {
-    (ref $has eq "ARRAY") or $has = [ $has ];  ###TODO: refactor
+method match($class: :$regex, :$has = []) {
+    ref $has eq "HASH" and return $class->_match_multiple_regex( has => $has );
 
+    (ref $has eq "ARRAY") or $has = [ $has ];  ###TODO: refactor
+    $class->_match_one_regex( regex => $regex, has => $has );
+}
+
+method _match_multiple_regex($class: :$has!) {
+    my @attributes = sort keys %$has;
+    my $meta_class = Pebble::Object::Class->new_meta_class( \@attributes );
+
+    return pmap {
+        my $field_value = {};            
+        for my $attribute ( @attributes ) {
+            my $regex = $has->{ $attribute };
+            $_ =~ $regex or next;
+            $field_value->{ $attribute } = $1;
+        }
+
+        keys %$field_value ? $meta_class->new_object( $field_value ) : ();
+    };
+}
+
+method _match_one_regex($class: :$regex!, :$has = []) {
     my $meta_class = Pebble::Object::Class->new_meta_class( $has );
 
     return pmap {
         my $args = $class->_match_line( $regex, $has, $_ );
         $args ? $meta_class->new_object( $args ) : ();
     };
-}
+}  
 
 method _match_line($class: $regex, $has, $line) {
     my @values = ( $line =~ $regex ) or return undef;

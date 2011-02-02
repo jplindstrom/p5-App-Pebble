@@ -223,7 +223,8 @@ sub ogroup_count (&) {
 }
 
 # Example: ogroup { query => { $attribute => "$grouped_attribute->$group_function" } }
-# Example: ogroup { query => { mean_duration => { duration => "mean" }, count => { query => "count" } }
+# Example: ogroup { query => { mean_duration => { duration => "mean" }, count => { query => "count" } } }
+# Example: ogroup { query => { _duration => [ mean", "count" ] } }
 sub ogroup (&) {
     my $subref = shift;
     my ($by, $into_attribute_grouped_attribute_function) = $subref->();
