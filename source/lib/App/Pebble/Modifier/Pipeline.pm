@@ -98,7 +98,9 @@ sub pprogress (;&) {
                 my $progress = sprintf( "%4s [$objects_per_s_k/s] $duration_text", $count_k );
 
                 $message     and $progress .= " - $message";
-                $message_sub and $progress .= " - " . $message_sub->();
+                if( $message_sub && blessed( $_) && !$_->isa( "IO::Pipeline::Control" ) ) {
+                    $progress .= " - " . $message_sub->();
+                }
                 
                 local $\ = undef;
                 print STDERR "\r$progress";
