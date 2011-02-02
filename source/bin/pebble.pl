@@ -20,7 +20,14 @@ use App::Pebble::Log qw/ $log /;
 use App::Pebble::Command::df;
 use App::Pebble::Command::du;
 
-main();
+eval {
+    main();
+};
+if( my $err = $@ ) {
+    chomp( $err );
+    $log->error( $err );
+}
+
 sub main {
     GetOptions(
         "default_pre:s"      => \( my $default_pre = 'pmap { chomp; $_ }' ),
@@ -30,14 +37,13 @@ sub main {
         "cmd:s"              => \( my $cmd ),
         "web_cache:s"        => \( my $web_cache = Cache::NullCache->new() ),
         "script"             => \( my $script ),
-        "screen_log_level:i" => \( my $screen_log_level = 2 ), # notice and higher
+        "verbose:i"          => \( my $verbose = 2 ), # warning and higher
         "log_file:s"         => \( my $log_file ),
         "info"               => \( my $info ),
     );
     $info and info(), exit(0);
 
     ###TODO: move into init
-    
     $log_file ||= do {
         my $log_dir = File::HomeDir->my_dist_data(
             'App-Pebble/log',
@@ -47,11 +53,13 @@ sub main {
     };
     my $file_log_level = $ENV{PEBBLE_LOG_LEVEL};
     defined $file_log_level or $file_log_level = 1; # info and higher
+    my $screen_log_level = 5 - $verbose;
     App::Pebble::Log->init(
         file         => $log_file,
         file_level   => $file_log_level,
         screen_level => $screen_log_level,
     );
+    $verbose < 0 || $verbose > 5 and die( "--verbose must be 0..4\n" );
     
     my $input_source = q{\*STDIN};
     my $input_source_fh;
@@ -145,6 +153,7 @@ pebble
     [--nostdin]
     [--cmd=COMMAND_WITH_ARGS]
     [--out=RENDERER]
+    [--verbose=1]
     [ PEBBLE_SOURCE_CODE PEBBLE_SOURCE_CODE ... ]
     [--web_cache [=flush] ]
     [--script [=NEW_SCRIPT_FILE] ]
@@ -156,6 +165,15 @@ pebble
 =item --cmd
 
 =item --out
+
+=item --verbose=2
+
+  0 => nothing
+  1 => error
+  2 => warning (default)
+  3 => notice
+  4 => info
+  5 => debug
 
 =item PEBBLE_SOURCE_CODE
 

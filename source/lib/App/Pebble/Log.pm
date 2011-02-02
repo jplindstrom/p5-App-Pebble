@@ -27,7 +27,7 @@ method init($class: :$file, :$file_level = 1, :$screen_level = 3 ) {
             name      => "file",
             newline   => 1,
             mode      => ">>",
-            min_level => $class->log_level_name( $file_level ),
+            min_level => $file_level,
             filename  => $file,
             callbacks => sub {
                 my %args = @_;
@@ -40,23 +40,10 @@ method init($class: :$file, :$file_level = 1, :$screen_level = 3 ) {
             name      => "screen",
             newline   => 1,
             stderr    => 1,
-            min_level => $class->log_level_name( $screen_level ),
+            min_level => $screen_level,
             callbacks => sub { my %args = @_; "[PBL] " . $args{message} },
         ),
     );
-}
-
-method log_level_name($class: $level ) {
-    return {
-        0 => "debug",
-        1 => "info",
-        2 => "notice",
-        3 => "warning",
-        4 => "error",
-        5 => "critical",
-        6 => "alert",
-        7 => "emergency",
-    }->{ $level } || "info";
 }
 
 1;
