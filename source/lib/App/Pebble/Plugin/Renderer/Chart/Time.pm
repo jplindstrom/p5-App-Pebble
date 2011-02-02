@@ -65,6 +65,8 @@ method render($class: $args?) {
 
     my $keys_are_all_datetimes = 1;
 
+    my $keep_flow = $args->{ keep_flow } && $file;
+
     return ppool(
       sub {
           $count++;
@@ -89,7 +91,7 @@ method render($class: $args?) {
               }
           }
 
-          ();
+          $keep_flow ? $_ : ();
       },
       sub {
           if( $keys_are_all_datetimes ) {
