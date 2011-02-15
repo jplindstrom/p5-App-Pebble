@@ -90,6 +90,7 @@ oadd_match { url => { user_id => qr|user_id/(\w+)| } }
 *** allow it to be it's own script with .pbl extension
 *** Call with parameters which are available inside
 **** S->CLI->param( "name" );
+** --nostdin
 ** DONE differentiate between p and pmap
 *** DONE Nope, instead use o { } to always return object
 *** p always returns the object
