@@ -78,7 +78,7 @@ sub main {
     }
 
     my $parser_stage;
-    $parser and $parser_stage ||= "$parser->parser";
+    $parser and $parser_stage ||= "$parser->parser";  ###TODO: inconsistent!
 
     my (@user_stages) = @ARGV;
     my $user_stage = join(
