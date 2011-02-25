@@ -10,7 +10,7 @@ use Moose;
 
 use Method::Signatures;
 
-use Data::Format::Pretty::Console qw(format_pretty);
+use Data::Format::Pretty::Console 0.06 qw(format_pretty);
 use IO::Pipeline;
 
 method needs_pool { 1 }

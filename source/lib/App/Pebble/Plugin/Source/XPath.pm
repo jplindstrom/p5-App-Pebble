@@ -24,7 +24,7 @@ method match($class: :$xml?, :$url?, :$file?, :$text?) {
     my $content_type;
     $file and $xml = read_file( $file );
     $url and $xml = do {
-        my $res = App::Pebble::Source::Web->get_response( $url );
+        my $res = App::Pebble::Plugin::Source::Web->get_response( $url );
         $content_type = $res->header( "Content-Type" ) || "";
         $res->content;
     };

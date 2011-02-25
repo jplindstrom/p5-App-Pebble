@@ -74,8 +74,10 @@ method _match_multiple_regex($class: :$has!) {
         my $field_value = {};            
         for my $attribute ( @attributes ) {
             my $regex = $has->{ $attribute };
-            $_ =~ $regex or next;
-            $field_value->{ $attribute } = $1;
+
+            my $value = undef;
+            $_ =~ $regex and $value = $1;
+            $field_value->{ $attribute } = $value;
         }
 
         keys %$field_value ? $meta_class->new_object( $field_value ) : ();

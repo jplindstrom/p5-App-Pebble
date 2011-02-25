@@ -208,6 +208,7 @@ sub ogroup_count (&) {
     return ppool(
         sub {
             my $by_key = $_->{ $by };
+            defined $by_key or $by_key = "";
             $by_object{ $by_key } ||= $_;
             $by_count{ $by_key }++;
             return ();

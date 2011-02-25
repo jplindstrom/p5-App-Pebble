@@ -40,9 +40,11 @@ sub main {
         "verbose:i"          => \( my $verbose = 2 ), # warning and higher
         "log_file:s"         => \( my $log_file ),
         "info"               => \( my $info ),
+        "table"              => \( my $out_table ),
     );
     $info and info(), exit(0);
-
+    $out_table and $output_renderer = "table";
+    
     ###TODO: move into init
     $log_file ||= do {
         my $log_dir = File::HomeDir->my_dist_data(
