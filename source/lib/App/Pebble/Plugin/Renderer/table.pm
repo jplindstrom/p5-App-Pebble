@@ -12,6 +12,7 @@ use Method::Signatures;
 
 use Data::Format::Pretty::Console 0.06 qw(format_pretty);
 use IO::Pipeline;
+use Data::Dumper;
 
 method needs_pool { 1 }
 
@@ -21,15 +22,18 @@ method render($class: $args?) {
       sub { push( @items, $_ ); () },
       sub {
         @items or return "";
-        format_pretty([
-            map { $_->as_hashref }
-            map {
-                blessed $_ && $_->can( "as_hashref" )
-                        or die( "Stream value ($_) isn't an object, so it can't be rendered with 'table'\n" );
-                $_
-            }
-            @items
-        ]);
+        format_pretty(
+            [
+                map { $_->as_hashref }
+                map {
+                    blessed $_ && $_->can( "as_hashref" )
+                            or die( "Stream value ($_) isn't a Pebble object, so it can't be rendered with 'table'. Value:\n" . Dumper( $_ ) );
+                    $_
+                }
+                @items
+            ],
+            { interactive => 1 },
+        );
       },
     );
 }
