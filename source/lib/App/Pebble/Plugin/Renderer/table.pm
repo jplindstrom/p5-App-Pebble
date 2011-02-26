@@ -16,7 +16,7 @@ use Data::Dumper;
 
 method needs_pool { 1 }
 
-method render($class: $args?) {
+method render($class: :$interactive = 1) {
     my @items;
     return ppool(
       sub { push( @items, $_ ); () },
@@ -32,7 +32,7 @@ method render($class: $args?) {
                 }
                 @items
             ],
-            { interactive => 1 },
+            { interactive => $interactive },
         );
       },
     );
