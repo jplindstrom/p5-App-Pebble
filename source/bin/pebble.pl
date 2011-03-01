@@ -30,17 +30,18 @@ if( my $err = $@ ) {
 
 sub main {
     GetOptions(
-        "default_pre:s"      => \( my $default_pre = 'pmap { chomp; $_ }' ),
-        "default_post:s"     => \( my $default_post ),  # 'pmap { "$_\n" }' ),
-        "parser:s"           => \( my $parser ),
-        "out:s"              => \( my $output_renderer ),
-        "cmd:s"              => \( my $cmd ),
-        "web_cache:s"        => \( my $web_cache = Cache::NullCache->new() ),
-        "script"             => \( my $script ),
-        "verbose:i"          => \( my $verbose = 2 ), # warning and higher
-        "log_file:s"         => \( my $log_file ),
-        "info"               => \( my $info ),
-        "table"              => \( my $out_table ),
+        "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
+        "default_post:s" => \( my $default_post ),  # 'pmap { "$_\n" }' ),
+        "parser:s"       => \( my $parser ),
+        "out:s"          => \( my $output_renderer ),
+        "cmd:s"          => \( my $cmd ),
+        "web_cache:s"    => \( my $web_cache = Cache::NullCache->new() ),
+        "script"         => \( my $script ),
+        "verbose:i"      => \( my $verbose = 2 ), # warning and higher
+        "log_file:s"     => \( my $log_file ),
+        "info"           => \( my $info ),
+        "table"          => \( my $out_table ),
+        "json"           => \( my $json ),
     );
     $info and info(), exit(0);
     $out_table and $output_renderer = "table";
@@ -62,6 +63,8 @@ sub main {
         screen_level => $screen_log_level,
     );
     $verbose < 0 || $verbose > 5 and die( "--verbose must be 0..4\n" );
+
+    $json and $parser = "JSON";
     
     my $input_source = q{\*STDIN};
     my $input_source_fh;
@@ -80,7 +83,11 @@ sub main {
     }
 
     my $parser_stage;
-    $parser and $parser_stage ||= "$parser->parser";  ###TODO: inconsistent!
+    if( $parser ) {
+        $parser =~ /^App::Pebble::/ or $parser = "App::Pebble::Plugin::Parser::$parser";
+        eval "use $parser"; $@ and die $@;
+        $parser_stage ||= "$parser->parse";
+    }
 
     my (@user_stages) = @ARGV;
     my $user_stage = join(

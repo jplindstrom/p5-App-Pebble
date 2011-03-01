@@ -16,7 +16,7 @@ use App::Pebble::Plugin::Parser::Regex;
 sub name    { "du" }
 sub command { "du -sk" }
 
-method parser($class: $args?) {
+method parse($class: $args?) {
     return App::Pebble::Plugin::Parser::Regex->match(
         regex => qr/(\S+) \s+ (\S+)/x,
         has   => [  "size",   "file" ],

@@ -16,7 +16,7 @@ use App::Pebble::Plugin::Parser::Regex;
 sub name    { "df" }
 sub command { "df" }
 
-method parser($class: $args?) {
+method parse($class: $args?) {
     return App::Pebble::Plugin::Parser::Regex->match(
         regex =>  qr/ (.+?) \s+  (\d+) \s+ (\d+) \s+ (\d+) \s+ (\d+)% \s+ (.+)      $/x,
         has   => [qw/ filesystem blocks    used      available capacity   mounted_on /]
