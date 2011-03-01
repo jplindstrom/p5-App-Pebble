@@ -15,6 +15,7 @@ use File::Slurp qw/ read_file /;
 use lib ("lib", "../../p5-Pebble-Object/source/lib");
 use App::Pebble;
 use App::Pebble::Log qw/ $log /;
+use App::Pebble::Config;
 
 #TODO: plugin system
 use App::Pebble::Command::df;
@@ -30,6 +31,7 @@ if( my $err = $@ ) {
 
 sub main {
     GetOptions(
+        "config_file:s"  => \( my $config_file ),
         "default_pre:s"  => \( my $default_pre = 'pmap { chomp; $_ }' ),
         "default_post:s" => \( my $default_post ),  # 'pmap { "$_\n" }' ),
         "parser:s"       => \( my $parser ),
@@ -45,7 +47,9 @@ sub main {
     );
     $info and info(), exit(0);
     $out_table and $output_renderer = "table";
-    
+
+    App::Pebble::Config->file( App::Pebble::Config->user_config_file( $config_file ) );
+
     ###TODO: move into init
     $log_file ||= do {
         my $log_dir = File::HomeDir->my_dist_data(
