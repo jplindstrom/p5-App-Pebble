@@ -172,6 +172,7 @@ sub ogrep (&) {
         numerical => sub { _is_numerical( shift ) },
         defined   => sub { defined( shift ) },
         true      => sub { !! shift },
+        false     => sub { ! !! shift },
     };
 
     return pgrep {
