@@ -12,6 +12,8 @@ Revision history for App-Pebble
 * App::Pebble::Plugin::Source::Statistics - (needs better name? Stat::Basic?)
   ->percent_of()
 
+* New Source::DBIS for use of DBIx::Simple
+
   
 0.008 -- 2011-02-01 00:14:31 UTC
 
