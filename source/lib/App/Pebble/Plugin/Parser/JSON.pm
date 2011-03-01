@@ -42,7 +42,7 @@ method parse($class:) {
                 or die( "Bad data from JSON line ($line_count) ($_)\n" );
         };
         if( my $err = $@ ) {
-            $log->error(  );
+            $log->error( $@ );
             return ();
         }
 
