@@ -16,6 +16,8 @@ use Moose;
 extends "Exporter";
 
 our @EXPORT = qw(
+    o
+    oonce
     onew
     omodify
     oadd
@@ -28,7 +30,6 @@ our @EXPORT = qw(
     ogroup_count
     ogroup
     otracer_bullet
-    o
 );
 
 use Method::Signatures;
@@ -47,6 +48,14 @@ sub o (&) {
     return pmap {
         $subref->($previous_object);
         $previous_object = $_;
+    };
+}
+
+sub oonce (&) {
+    my $subref = shift;
+    my $count = 0;
+    return  o {
+        $count++ or $subref->();
     };
 }
 
