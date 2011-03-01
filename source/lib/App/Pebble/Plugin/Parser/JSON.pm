@@ -50,5 +50,4 @@ method parse($class:) {
     };
 }
 
-
 1;
