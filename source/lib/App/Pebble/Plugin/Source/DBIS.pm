@@ -36,7 +36,7 @@ method db($class: $datasource_or_connect_string?, $username?, $password? ) {
         $connected_db or die( "S::DBIS->db: ->db() called without connecting to a database beforehand \n" );
         return $connected_db;
     };
-    
+
     my $config = App::Pebble::Config->instance;
     my $datasource;
     my $connect;
