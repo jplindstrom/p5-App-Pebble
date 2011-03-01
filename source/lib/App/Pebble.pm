@@ -116,6 +116,7 @@ use Method::Signatures;
 use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
+use Data::Dumper;
 
 use App::Pebble::Log qw/ $log /;
 
