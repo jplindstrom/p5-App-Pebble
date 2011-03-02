@@ -13,8 +13,8 @@ use Moose;
 use Method::Signatures;
 use List::Util qw/ max /;
 
-use App::Pebble::Modifier::Pipeline;
 use Pebble::Object::Class;
+use App::Pebble::Modifier::Pipeline;
 
 =head1 METHODS
 
@@ -77,6 +77,7 @@ method oadd_scale($class: $of_attribute, :$new_attribute = $of_attribute, :$new_
             else {
                 $max_value = $value;
             }
+
             return ();
         },
         sub {
