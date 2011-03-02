@@ -1,3 +1,4 @@
+# -*- mode: cperl; cperl-indent-level: 4; -*-
 
 =head1 NAME
 
