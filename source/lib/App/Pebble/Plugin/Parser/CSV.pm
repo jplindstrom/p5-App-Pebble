@@ -9,6 +9,7 @@ package App::Pebble::Plugin::Parser::CSV;
 use Moose;
 use Method::Signatures;
 
+use Carp;
 use Text::CSV_XS;
 
 use App::Pebble::Log qw/ $log /;
