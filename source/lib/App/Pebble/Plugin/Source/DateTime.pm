@@ -1,3 +1,4 @@
+# -*- mode: cperl; cperl-indent-level: 4; -*-
 
 =head1 NAME
 
@@ -11,6 +12,8 @@ use Moose;
 use Method::Signatures;
 
 use DateTimeX::Easy;
+
+use App::Pebble::Modifier::Object;
 
 method parse($class: $dt_string) {
     return DateTimeX::Easy->new( $dt_string );
@@ -26,6 +29,25 @@ method parse_iso($class: $dt_string) {
         minute => $5,
         second => $6,
     );
+}
+
+=head2 oconvert_parse($class: @attribute ) : $pipeline_segment
+
+Return an oadd {} pipeline segment which converts all @attribute
+values into DateTime's by parsing them.
+
+    | S::DateTime->oconvert_parse( "date" )
+
+=cut
+
+method oconvert_parse($class:) {
+    my (@attribute) = @_;
+    # validate attributes
+    return o {
+        for my $attribute (@attribute) {
+            $_->$attribute( $class->parse( $_->$attribute ) );
+        }
+    };
 }
 
 1;
