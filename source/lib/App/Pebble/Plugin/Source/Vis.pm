@@ -61,7 +61,7 @@ method oadd_size($class: $of_attribute, :$bar_attribute?, :$max_size = 10, :$cha
             new_max_value => $max_size,
         )
         | oadd {
-            $bar_attribute => do { warn "((($_)))\n"; $class->text_bar( $temp_scale_attribute, char => $char ) }
+            $bar_attribute => do { $class->text_bar( $temp_scale_attribute, char => $char ) }
         }
         | odelete { $temp_scale_attribute };
 }
