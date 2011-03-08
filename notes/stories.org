@@ -63,6 +63,9 @@
 ** DONE Global cache manager, for e.g. caching http requests
 *** can be reset for all, or for a type e.g. Web
 
+** S::Web to use a base URL for subsequent relative URLs
+*** First fully qualified, then relative works from that
+*** Must work with the fact that they're not in sequence by default
 ** Fix Chart:Time render to use a hash, not a hashref
 ** TODO ppool signature can be &;&&
 ** Regex match convenience
