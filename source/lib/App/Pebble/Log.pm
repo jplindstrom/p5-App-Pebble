@@ -41,7 +41,7 @@ method init($class: :$file, :$file_level = 1, :$screen_level = 3 ) {
             newline   => 1,
             stderr    => 1,
             min_level => $screen_level,
-            callbacks => sub { my %args = @_; "[PBL] " . $args{message} },
+            callbacks => sub { my %args = @_; "[PBL] $args{message}\n" },
         ),
     );
 }
