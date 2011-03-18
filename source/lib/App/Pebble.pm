@@ -117,6 +117,7 @@ use IO::Pipeline;
 use List::MoreUtils qw/ each_arrayref /;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 use Data::Dumper;
+use Cache::NullCache;
 
 use App::Pebble::Log qw/ $log /;
 
@@ -148,6 +149,15 @@ Optional cache object, used for e.g. web requests.
 =cut
 
 class_has cache => ( is => "rw" );
+
+=head2 null_cache[ Cache::NullCache  ]
+
+Null cache object, used for cases when no actual cache should be used.
+
+=cut
+
+class_has null_cache => ( is => "rw", default => sub { Cache::NullCache->new() } );
+
 
 
 =head1 METHODS
