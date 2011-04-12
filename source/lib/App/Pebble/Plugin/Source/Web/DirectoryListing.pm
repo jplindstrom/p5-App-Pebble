@@ -17,7 +17,7 @@ use App::Pebble::Modifier::Object;
 use App::Pebble::Modifier::Pipeline;
 
 
-method oadd_links($class: $listing_url_attribute, :$link_attribute?, :$link_text_attribute?) {
+method oadd_links($class: $listing_url_attribute, :$link_attribute?, :$link_text_attribute?, :$no_cache = 0) {
     $link_attribute      ||= "link_url";
     $link_text_attribute ||= "link_text";
 
@@ -25,7 +25,7 @@ method oadd_links($class: $listing_url_attribute, :$link_attribute?, :$link_text
 
     return oadd {
         S::XPath->match(
-            xml           => S::Web->get( $_->$listing_url_attribute ),
+            xml           => S::Web->get( $_->$listing_url_attribute, no_cache => $no_cache ),
             text          => {
                 $link_attribute      => q|//a/@href|,
                 $link_text_attribute => q|//a/text()|,
@@ -35,7 +35,6 @@ method oadd_links($class: $listing_url_attribute, :$link_attribute?, :$link_text
     | omultiply { $link_attribute, $link_text_attribute }
     | pgrep { $_->$link_attribute !~ /\W/ }  # Filter out junk links; only works for this page, not a general solution in _any_ way
     | o { $_->$link_attribute( URI->new_abs( $_->$link_attribute, $_->listing_url ) ) }
-    | odelete { $listing_url_attribute }
     ;
 }
 
