@@ -210,6 +210,7 @@ sub _is_numerical {
 }
 
 # Example: ogroup_count { query => query_count }
+# TODO: sort => "-1", delete => 1
 sub ogroup_count (&) {
     my $subref = shift;
     my ($by, $into) = $subref->();
