@@ -7,13 +7,20 @@ App::Pebble::Plugin::Source::Web - Web source, e.g. HTTP get
 
 package App::Pebble::Plugin::Source::Web;
 use Moose;
+use MooseX::ClassAttribute;
 
 use Method::Signatures;
 
 use LWP::UserAgent::WithCache;
+use HTTP::Cookies;
 use Data::Dumper;
 
 use App::Pebble::Log qw/ $log /;
+
+class_has cookie_jar => (
+  is      => "rw",
+  default => sub { HTTP::Cookies->new( {} ) }, # Don't persist across pebble.pl invocations
+);
 
 method get_response($class: $url, :$no_cache = 0) {
     require App::Pebble;
@@ -23,7 +30,8 @@ method get_response($class: $url, :$no_cache = 0) {
     $ua->{cache} = # so sue me, provide a useful interface then
         $no_cache
         ? App::Pebble->null_cache
-        : App::Pebble->cache; 
+        : App::Pebble->cache;
+    $ua->cookie_jar( $class->cookie_jar );
 
     # Ignore the response "expires" header, always use cache if
     # present
