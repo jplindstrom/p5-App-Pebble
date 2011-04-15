@@ -37,6 +37,7 @@ method db($class: $datasource_or_connect_string?, $username?, $password? ) {
         return $connected_db;
     };
 
+    ###TODO: extract this whole error checking thing
     my $config = App::Pebble::Config->instance;
     my $datasource;
     my $connect;
