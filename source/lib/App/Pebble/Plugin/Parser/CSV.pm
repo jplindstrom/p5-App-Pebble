@@ -31,8 +31,8 @@ method parse($class: :$csv_args, :$fields, :$has_header = 0) {
       $line =~ /^\s*#/ and return (); # Skip comment lines
       $line =~ /^\s*$/ and return (); # Skip empty lines (may contain whitespace)
 
-      $csv->parse($_) or do {
-        $log->error( "Could not parse CSV line ($line_count) ($_)" );
+      $csv->parse($line) or do {
+        $log->error( "Could not parse CSV line ($line_count) ($line)" );
         return ();
       };
       my @field_values  = $csv->fields;
@@ -40,7 +40,7 @@ method parse($class: :$csv_args, :$fields, :$has_header = 0) {
       if( ( !$has_seen_header ) && $has_header ) {
           $fields ||= [ map {
               s/^\s+//;    # Remove leading whitespace
-              s/s+$//;     # Remove trailing whitespace
+              s/\s+$//;    # Remove trailing whitespace
               s/\W+/_/gsm; # Replace invalid variable name chars with _
               $_,
           } @field_values ];
