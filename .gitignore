@@ -8,3 +8,5 @@
 /source/lib/App/Pebble/Plugin/Source/Dynamite.pm
 /source/lib/App/Pebble/Plugin/Source/Ion.pm
 /source/lib/App/Pebble/Plugin/Source/Pips.pm
+/source/lib/App/Pebble/Plugin/Parser/DataBridge.pm
+/source/lib/App/Pebble/Plugin/Source/DangerousSql.pm
